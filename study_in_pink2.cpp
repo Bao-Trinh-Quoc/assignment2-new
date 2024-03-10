@@ -6,6 +6,16 @@
 /// DO NOT modify any parameters in the functions.
 ////////////////////////////////////////////////////////////////////////
 
+// Implement the MapElement class
+MapElement::MapElement(ElementType in_type) : type(in_type) {}
+MapElement::~MapElement()
+{
+    // Intentionally left empty
+}
+ElementType MapElement::getType() const
+{
+    return this->type;
+}
 
 
 ////////////////////////////////////////////////
