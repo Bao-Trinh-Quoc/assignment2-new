@@ -1,7 +1,7 @@
 /*
 * Ho Chi Minh City University of Technology
 * Faculty of Computer Science and Engineering
-* Initial code for Assignment 1
+* Initial code for Assignment 2
 * Programming Fundamentals Spring 2023
 * Author: Vu Van Tien
 * Date: 02.02.2023
@@ -91,14 +91,14 @@ private:
 public:
     static const Position npos;
 
-    Position(int r=0, int c=0);
+    Position(int r=0, int c=0) : r(r), c(c) {};
 
     Position(const string & str_pos);
 
-    int getRow() const;
-    int getCol() const;
-    void setRow(int r);
-    void setCol(int c);
+    int getRow() const {    return r;       }
+    int getCol() const {    return c;       }
+    void setRow(int r) {    this->r = r;    }
+    void setCol(int c) {    this->c = c;    }
 
     string str() const;
 
