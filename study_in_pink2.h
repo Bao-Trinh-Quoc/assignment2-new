@@ -49,9 +49,9 @@ class MapElement {
 protected:
     ElementType type;
 public:
-    MapElement(ElementType in_type);
-    virtual ~MapElement();
-    virtual ElementType getType() const;
+    MapElement(ElementType in_type) : type(in_type) {};
+    virtual ~MapElement() {};   
+    virtual ElementType getType() const {   return type;   };
 };
 
 class Path : public MapElement {
@@ -113,8 +113,9 @@ protected:
     string name;
 
 public:
-    MovingObject(int index, const Position pos, Map * map, const string & name="");
-    virtual ~MovingObject();
+    MovingObject(int index, const Position pos, Map * map, const string & name="")
+                : index(index), pos(pos), map(map), name(name) {};
+    virtual ~MovingObject() {};
     virtual Position getNextPosition() = 0;
     Position getCurrentPosition() const;
     virtual void move() = 0;

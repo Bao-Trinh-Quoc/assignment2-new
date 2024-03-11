@@ -6,16 +6,7 @@
 /// DO NOT modify any parameters in the functions.
 ////////////////////////////////////////////////////////////////////////
 
-/*===================== =Implement the MapElement class ============== */ 
-MapElement::MapElement(ElementType in_type) : type(in_type) {}
-MapElement::~MapElement()
-{
-    // Intentionally left empty
-}
-ElementType MapElement::getType() const
-{
-    return this->type;
-}
+
 /*======================= Implement the Map class ===================== */ 
 // Constructor needs to create a 2D array which each element is an appropriate object.
 // If this element is in the array_walls, this element is Wall object.
