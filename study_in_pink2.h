@@ -70,6 +70,7 @@ class FakeWall : public MapElement {
 private:
     int reg_exp;
 public:
+    FakeWall() : MapElement(FAKE_WALL), reg_exp(0) {};
     FakeWall(int in_reg_exp) : MapElement(FAKE_WALL), reg_exp(in_reg_exp) {};
     ~FakeWall() {};
 };
@@ -77,7 +78,7 @@ public:
 class Map {
 private:
     int num_rows, num_cols;
-    MapElement ** elements;
+    MapElement *** elements;
 public:
     Map(int num_rows, int num_cols, int num_walls, Position * array_walls, int num_fake_walls, Position * array_fake_walls) : num_rows(num_rows), num_cols(num_cols);
     ~Map();
