@@ -9,3 +9,4 @@ Move implementation of MapElement from cpp to .h    <br>
 # 12/03/2024
 implement MovingObject <br>
 added more additional methods, defined npos in Position and isValid in Map <br>
+implement some of Sherlock class <br>

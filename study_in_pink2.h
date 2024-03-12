@@ -113,7 +113,7 @@ protected:
     Position pos;
     Map * map;
     string name;
-    int exp;
+
 public:
     MovingObject(int index, const Position pos, Map * map, const string & name="", const int & exp = 0)
                 : index(index), pos(pos), map(map), name(name), exp(exp) {};
@@ -124,19 +124,22 @@ public:
     virtual string str() const = 0;
     // additional methods
     string getName() const {    return name;   }
-    int getExp() const {    return exp;   }
+    virtual int getExp() const = 0;
 };
 
-class Sherlock /* TODO */ {
+class Sherlock : public MovingObject {
 private:
     // TODO
+    string moving_rule;
+    int hp;
+    int exp;
 
 public:
     Sherlock(int index, const string & moving_rule, const Position & init_pos, Map * map, int init_hp, int init_exp);
-    // getNextPosition
-    // move
-    // str
-    // ...
+    Position getNextPosition();
+    void move();
+    string str() const;
+    int getExp() const {    return exp;   }
 };
 
 class Watson /* TODO */ {

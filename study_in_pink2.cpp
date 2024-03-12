@@ -142,6 +142,24 @@ bool Position::isEqual(int in_r, int in_c) const
 }
 const Position Position::npos = Position(-1, -1);
 
+/*================ Implement of Sherlock class ========================*/
+Sherlock::Sherlock(int index, const string & moving_rule, const Position & pos, Map * map, int init_hp, int init_exp)
+        : MovingObject(index, pos, map, "Sherlock"), moving_rule(moving_rule) 
+{
+    // init_hp must in within range [0, 500]
+    if (init_hp < 0)
+        init_hp = 0;
+    else if (init_hp > 500)
+        init_hp = 500;
+    // init_exp must in within range [0, 900]
+    if (init_exp < 0)
+        init_exp = 0;
+    else if (init_exp > 900)
+        init_exp = 900;
+    
+    hp = init_hp;
+    exp = init_exp;
+}          
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
 ////////////////////////////////////////////////
