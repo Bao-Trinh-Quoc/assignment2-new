@@ -73,6 +73,8 @@ public:
     FakeWall() : MapElement(FAKE_WALL), reg_exp(0) {};
     FakeWall(int in_reg_exp) : MapElement(FAKE_WALL), reg_exp(in_reg_exp) {};
     ~FakeWall() {};
+    // additional methods
+    int getRegExp() const {    return reg_exp;   }
 };
 
 class Map {
@@ -80,9 +82,9 @@ private:
     int num_rows, num_cols;
     MapElement *** elements;
 public:
-    Map(int num_rows, int num_cols, int num_walls, Position * array_walls, int num_fake_walls, Position * array_fake_walls) : num_rows(num_rows), num_cols(num_cols);
+    Map(int num_rows, int num_cols, int num_walls, Position * array_walls, int num_fake_walls, Position * array_fake_walls);
     ~Map();
-    // bool isValid ( const Position & pos , MovingObject * mv_obj ) const ;
+    bool isValid ( const Position & pos , MovingObject * mv_obj ) const ;
 };
 
 class Position {
@@ -111,15 +113,18 @@ protected:
     Position pos;
     Map * map;
     string name;
-
+    int exp;
 public:
-    MovingObject(int index, const Position pos, Map * map, const string & name="")
-                : index(index), pos(pos), map(map), name(name) {};
+    MovingObject(int index, const Position pos, Map * map, const string & name="", const int & exp = 0)
+                : index(index), pos(pos), map(map), name(name), exp(exp) {};
     virtual ~MovingObject() {};
     virtual Position getNextPosition() = 0;
     Position getCurrentPosition() const;
     virtual void move() = 0;
     virtual string str() const = 0;
+    // additional methods
+    string getName() const {    return name;   }
+    int getExp() const {    return exp;   }
 };
 
 class Sherlock /* TODO */ {

@@ -59,6 +59,59 @@ Map::~Map()
     delete[] elements;
 }
 
+/*  checks whether the location pos is a valid location for the object mv_obj to move to
+    depended on type of mv_obj and the type of the element at pos
+    Path: represents a path, objects can move on this element.  
+    Wall: represents a wall, objects cannot move on this element.
+    FakeWall: Because the criminal created the maze, he can recognize 
+    the fake wall, and Sherlock, with his observation ability, can detect this fake wall.
+    For Watson, FakeWall will be detected (and moved through) if Watson has EXP greater than
+    the FakeWall’s required EXP. All other movable objects cannot be moved on this element.
+*/
+bool Map::isValid(const Position & pos, MovingObject * mv_obj) const
+{
+    int row = pos.getRow();
+    int col = pos.getCol();
+    // Check if the position is out of the map
+    if (row < 0 || row >= num_rows || col < 0 || col >= num_cols)
+    {
+        return false;
+    }
+    // Check if the object is a Path
+    if (elements[row][col]->getType() == PATH)
+    {
+        return true;
+    }
+    // Check if the object is a Wall
+    if (elements[row][col]->getType() == WALL)
+    {
+        return false;
+    }
+    // Check if the object is a FakeWall
+    if (elements[row][col]->getType() == FAKE_WALL)
+    {
+        // Check if the object is a MovingObject
+        if (mv_obj != nullptr)
+        {
+            // Check if the object is a Watson
+            if (mv_obj->getName() == "Watson")
+            {
+                // Check if the Watson's EXP is greater than the FakeWall's required EXP
+                if (mv_obj->getExp() > dynamic_cast<FakeWall *>(elements[row][col])->getRegExp())
+                {
+                    return true;
+                }
+            }
+            // Check if the object is a Sherlock
+            else if (mv_obj->getName() == "Sherlock")
+            {
+                return true;
+            }
+        }
+    }
+    return false; 
+}
+
 /*================ Implement of Position class ========================*/
 /*
 Public constructor with one parameter str_pos demonstrates a string of location
@@ -87,6 +140,8 @@ bool Position::isEqual(int in_r, int in_c) const
 {
     return (r == in_r && c == in_c);
 }
+const Position Position::npos = Position(-1, -1);
+
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
 ////////////////////////////////////////////////
