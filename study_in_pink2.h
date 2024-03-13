@@ -101,10 +101,11 @@ public:
     int getCol() const {    return c;       }
     void setRow(int r) {    this->r = r;    }
     void setCol(int c) {    this->c = c;    }
-
     string str() const;
-
     bool isEqual(int in_r, int in_c) const;
+    // additional methods
+    bool operator==(const Position & pos) const { return r == pos.c && c == pos.c;}
+    bool operator!=(const Position & pos) const { return !(*this == pos);   }  
 };
 
 class MovingObject {
@@ -115,8 +116,8 @@ protected:
     string name;
 
 public:
-    MovingObject(int index, const Position pos, Map * map, const string & name="", const int & exp = 0)
-                : index(index), pos(pos), map(map), name(name), exp(exp) {};
+    MovingObject(int index, const Position pos, Map * map, const string & name="")
+                : index(index), pos(pos), map(map), name(name) {};
     virtual ~MovingObject() {};
     virtual Position getNextPosition() = 0;
     Position getCurrentPosition() const;
