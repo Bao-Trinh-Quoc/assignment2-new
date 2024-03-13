@@ -14,3 +14,4 @@ implement some of Sherlock class <br>
 changed constructor of MovingObject <br>
 added overloaded operator == != in Position <br>
 implemented Sherlock <br>
+implemented Watson <br>

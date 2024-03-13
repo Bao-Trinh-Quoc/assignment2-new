@@ -160,6 +160,8 @@ Sherlock::Sherlock(int index, const string & moving_rule, const Position & pos, 
     hp = init_hp;
     exp = init_exp;
 }       
+
+
 /*
 If the returned Position is not a valid position for this object to move then return npos of class Position.
 Sherlock moves according to moving_rule. Each time the method is called, the next character is used as the direction of movement.
@@ -209,6 +211,69 @@ string Sherlock::str() const
 {
     stringstream ss;
     ss << "Sherlock[index=" << index << ";pos=" << pos.str() << ";moving_rule=" << moving_rule << "]";
+    return ss.str();
+}
+
+/*================ Implement of Watson class ========================*/
+Watson::Watson(int index, const string & moving_rule, const Position & init_pos, Map * map, int init_hp, int init_exp)
+        : MovingObject(index, pos, map, "Watson"), moving_rule(moving_rule)
+{
+    // init_hp must in within range [0, 500]
+    if (init_hp < 0)
+        init_hp = 0;
+    else if (init_hp > 500)
+        init_hp = 500;
+    // init_exp must in within range [0, 900]
+    if (init_exp < 0)
+        init_exp = 0;
+    else if (init_exp > 900)
+        init_exp = 900;
+    
+    hp = init_hp;
+    exp = init_exp;
+}
+Position Watson::getNextPosition()
+{
+    static int i = 0;
+    int r = pos.getRow();
+    int c = pos.getCol();
+    char direction = moving_rule[i];
+    i = (i + 1) % moving_rule.length(); // Update the index for the next call
+    switch (direction)
+    {
+        case 'U':
+            r--;
+            break;
+        case 'D':
+            r++;
+            break;
+        case 'L':
+            c--;
+            break;
+        case 'R':
+            c++;
+            break;
+    }
+    Position next_pos(r, c);
+    if (map->isValid(next_pos, this))
+    {
+        return next_pos;
+    }
+    return Position::npos;
+}
+void Watson::move()
+{
+    Position next_pos = getNextPosition();
+    if (next_pos != Position::npos)
+    {
+        pos = next_pos;
+    }
+}
+//  Watson[index=<index>;pos=<pos>;moving_rule=<moving_rule>]
+string Watson::str() const
+{
+    stringstream ss;
+    ss << "Watson[index=" << index << ";pos=" << pos.str() << ";moving_rule=" << moving_rule << "]";
     return ss.str();
 }
 ////////////////////////////////////////////////

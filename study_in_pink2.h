@@ -120,7 +120,7 @@ public:
                 : index(index), pos(pos), map(map), name(name) {};
     virtual ~MovingObject() {};
     virtual Position getNextPosition() = 0;
-    Position getCurrentPosition() const;
+    virtual Position getCurrentPosition() const = 0;
     virtual void move() = 0;
     virtual string str() const = 0;
     // additional methods
@@ -137,22 +137,27 @@ private:
 
 public:
     Sherlock(int index, const string & moving_rule, const Position & init_pos, Map * map, int init_hp, int init_exp);
+    Position getCurrentPosition() const {   return pos; }
     Position getNextPosition();
     void move();
     string str() const;
     int getExp() const {    return exp;   }
 };
 
-class Watson /* TODO */ {
+class Watson : public MovingObject {
 private:
     // TODO
+    string moving_rule;
+    int hp;
+    int exp;
 
 public:
     Watson(int index, const string & moving_rule, const Position & init_pos, Map * map, int init_hp, int init_exp);
-    // getNextPosition
-    // move
-    // str
-    // ...
+    Position getCurrentPosition() const {   return pos; }
+    Position getNextPosition();
+    void move();
+    string str() const;
+    int getExp() const {    return exp;   }
 };
 
 class Criminal /* TODO */ {
