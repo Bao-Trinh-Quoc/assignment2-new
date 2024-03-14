@@ -107,6 +107,10 @@ bool Map::isValid(const Position & pos, MovingObject * mv_obj) const
             {
                 return true;
             }
+            else if (mv_obj->getName() == "Criminal")
+            {
+                return true;
+            }
         }
     }
     return false; 
@@ -274,6 +278,59 @@ string Watson::str() const
 {
     stringstream ss;
     ss << "Watson[index=" << index << ";pos=" << pos.str() << ";moving_rule=" << moving_rule << "]";
+    return ss.str();
+}
+
+/*================ Implement of Criminal class ========================*/
+Criminal::Criminal(int index, const Position & init_pos, Map * map, Sherlock * sherlock, Watson * watson)
+        : MovingObject(index, pos, map, "Criminal"), sherlock(sherlock), watson(watson)
+{}
+/* The criminal has cameras monitoring both Sherlock and Watson in this maze.
+   Therefore, unlike the detective couple’s way of moving, the criminal will
+   choose the next moving location as the valid location with the greatest total distance to Sherlock
+    and Watson. (Using Manhattan distance)
+
+    In case there is more than 1 location with the greatest total distance to Sherlock and
+    Waton, priority is given to choosing the location in the order of directions ’U’, ’L’, ’D’, ’R’.
+*/
+Position Criminal::getNextPosition()
+{
+    // U, L, D, R
+    Position directions[] = {Position(-1, 0), Position(0, -1), Position(1, 0), Position(0, 1)};
+    int maxDistance = -1;
+    Position next_pos = pos;
+
+    for (int i = 0; i < 4; i++)
+    {
+        // Calculate new Criminal position
+        int xdir = pos.getRow() + directions[i].getRow();
+        int ydir = pos.getCol() + directions[i].getCol();
+        // Calculate distance between criminal - sherlock and criminal - watson
+        int criminal_sherlock = abs(xdir - sherlock->getCurrentPosition().getRow()) 
+                                + abs(ydir - sherlock->getCurrentPosition().getCol());
+        int criminal_watson   = abs(xdir - watson->getCurrentPosition().getRow()) 
+                                + abs(ydir - watson->getCurrentPosition().getCol());
+        // Calculate total distance
+        int totalDistance = criminal_sherlock + criminal_watson;
+        // Update maxDistance and next position
+        if (totalDistance > maxDistance)
+        {
+            Position temp = Position(xdir, ydir);
+            if (map->isValid(temp, this))
+            {
+                maxDistance = totalDistance;
+                next_pos = temp;
+            }
+        }
+    }
+    return next_pos;
+}
+void Criminal::move()
+{}
+string Criminal::str() const
+{
+    stringstream ss;
+    ss << "Criminal[index=" << index << ";pos=" << pos.str() << "]";
     return ss.str();
 }
 ////////////////////////////////////////////////

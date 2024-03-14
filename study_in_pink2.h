@@ -125,7 +125,7 @@ public:
     virtual string str() const = 0;
     // additional methods
     string getName() const {    return name;   }
-    virtual int getExp() const = 0;
+    virtual int getExp() const;
 };
 
 class Sherlock : public MovingObject {
@@ -160,16 +160,18 @@ public:
     int getExp() const {    return exp;   }
 };
 
-class Criminal /* TODO */ {
+class Criminal : public MovingObject {
 private:
     // TODO
-
+    Sherlock * sherlock;
+    Watson  * watson;
 public:
     Criminal(int index, const Position & init_pos, Map * map, Sherlock * sherlock, Watson * watson);
-    // getNextPosition
-    // move
-    // str
-    // ...
+    Position getCurrentPosition() const {   return pos; }
+    Position getNextPosition();
+    void move();
+    string str() const;
+
 };
 
 class ArrayMovingObject {

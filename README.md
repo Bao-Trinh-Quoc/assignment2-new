@@ -15,3 +15,7 @@ changed constructor of MovingObject <br>
 added overloaded operator == != in Position <br>
 implemented Sherlock <br>
 implemented Watson <br>
+# 14/03/2024
+changed getExp in movingObject to non pure virtual function <br>
+updated isValid in map to accept Criminal as another case in FakeWall <br>
+implemented Criminal class <br>
