@@ -19,3 +19,6 @@ implemented Watson <br>
 changed getExp in movingObject to non pure virtual function <br>
 updated isValid in map to accept Criminal as another case in FakeWall <br>
 implemented Criminal class <br>
+# 16/03/2024
+implemented ArrayMovingObjects <br>
+added overloaded method for class Position <br>

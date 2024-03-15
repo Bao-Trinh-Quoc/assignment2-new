@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "xstring": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "format": "cpp",
+        "istream": "cpp",
+        "tuple": "cpp",
+        "xutility": "cpp"
     }
 }

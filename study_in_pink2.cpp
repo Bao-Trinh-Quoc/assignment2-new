@@ -144,6 +144,10 @@ bool Position::isEqual(int in_r, int in_c) const
 {
     return (r == in_r && c == in_c);
 }
+bool Position::isEqual(const Position & pos) const
+{
+    return (r == pos.r && c == pos.c);
+}
 const Position Position::npos = Position(-1, -1);
 
 /*================ Implement of Sherlock class ========================*/
@@ -326,13 +330,72 @@ Position Criminal::getNextPosition()
     return next_pos;
 }
 void Criminal::move()
-{}
+{
+    Position next_pos = getNextPosition();
+    if (next_pos != Position::npos)
+    {
+        pos = next_pos;
+    }
+}
+// Criminal[index=<index>;pos=<pos>]
 string Criminal::str() const
 {
     stringstream ss;
     ss << "Criminal[index=" << index << ";pos=" << pos.str() << "]";
     return ss.str();
 }
+
+/*================ Implement of ArrayMovingObject class ========================*/
+ArrayMovingObject::ArrayMovingObject(int capcity)
+{
+    this->capacity = capcity;
+    count = 0;
+    arr_mv_objs = new MovingObject * [capcity];
+}
+ArrayMovingObject::~ArrayMovingObject()
+{
+    for (int i = 0; i < capacity; i++)
+    {
+        delete arr_mv_objs[i];
+    }
+    delete[] arr_mv_objs;
+}
+bool ArrayMovingObject::add(MovingObject * mv_obj)
+{
+    if (!isFull())
+    {
+        arr_mv_objs[count++] = mv_obj;
+        return true;
+    }
+
+    return false;
+}
+/* The str method returns a string representing information for ArrayMovingObject.
+    The format of the returned string is:
+    Array[count=<count>;capacity=<capacity>;<MovingObject1>;...]
+    MovingObject1,...: These are the MovingObjects in the array, respectively. Each
+    MovingObject is printed in the corresponding format of that object type.
+    Example:
+    ArrayMovingObject[count=3;capacity=10;Criminal[index=0;pos=(8,9)];
+    Sherlock[index=1;pos=(1,4);moving_rule=RUU]; Watson[index=2;pos=(2,1);moving_rule=LU]]
+*/
+string ArrayMovingObject::str() const
+{
+    stringstream ss;
+    ss << "ArrayMovingObject[count=" << count << ";capacity=" << capacity << ";";
+    for (int i = 0; i < count; i++)
+    {
+        ss << arr_mv_objs[i]->str();
+        if (i < count - 1)
+        {
+            ss << ";";
+        }
+    }
+    ss << "]";
+    return ss.str();
+
+}
+
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
 ////////////////////////////////////////////////

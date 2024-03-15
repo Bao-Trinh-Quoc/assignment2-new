@@ -103,6 +103,7 @@ public:
     void setCol(int c) {    this->c = c;    }
     string str() const;
     bool isEqual(int in_r, int in_c) const;
+    bool isEqual(const Position & pos) const;
     // additional methods
     bool operator==(const Position & pos) const { return r == pos.c && c == pos.c;}
     bool operator!=(const Position & pos) const { return !(*this == pos);   }  
@@ -177,16 +178,20 @@ public:
 class ArrayMovingObject {
 private:
     // TODO
-
+private:
+    MovingObject ** arr_mv_objs;
+    int count;
+    int capacity;
 public:
     ArrayMovingObject(int capacity);
-
     ~ArrayMovingObject() ;
-    bool isFull() const;
+    bool isFull() const {   return count == capacity;   }
     bool add(MovingObject * mv_obj);
-    MovingObject * get(int index) const;
-    int size() const; // return current number of elements in the array
     string str() const;
+    MovingObject * get(int index) const {   return arr_mv_objs[index];}
+    // return current number of elements in the array
+    int size() const {   return count;   }
+    
 };
 
 class Configuration {
