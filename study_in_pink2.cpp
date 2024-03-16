@@ -173,8 +173,8 @@ Sherlock::Sherlock(int index, const string & moving_rule, const Position & pos, 
 /*
 If the returned Position is not a valid position for this object to move then return npos of class Position.
 Sherlock moves according to moving_rule. Each time the method is called, the next character is used as the direction of movement.
-The first time the method is called, the first character will be used. When the last character is used, it will return to starting
-the process from the first character.
+The first time the method is called, the first character will be used. 
+When the last character is used, it will return to starting the process from the first character.
 Example: moving_rule = "LR", the order of characters used is: ’L’, ’R’, ’L’, ’R’, ’L’, ’R’,. .. 
 */
 Position Sherlock::getNextPosition() 
@@ -289,9 +289,9 @@ string Watson::str() const
 Criminal::Criminal(int index, const Position & init_pos, Map * map, Sherlock * sherlock, Watson * watson)
         : MovingObject(index, pos, map, "Criminal"), sherlock(sherlock), watson(watson)
 {}
-/* The criminal has cameras monitoring both Sherlock and Watson in this maze.
-   Therefore, unlike the detective couple’s way of moving, the criminal will
-   choose the next moving location as the valid location with the greatest total distance to Sherlock
+/*  The criminal has cameras monitoring both Sherlock and Watson in this maze.
+    Therefore, unlike the detective couple’s way of moving, the criminal will
+    choose the next moving location as the valid location with the greatest total distance to Sherlock
     and Watson. (Using Manhattan distance)
 
     In case there is more than 1 location with the greatest total distance to Sherlock and
@@ -370,7 +370,7 @@ bool ArrayMovingObject::add(MovingObject * mv_obj)
 
     return false;
 }
-/* The str method returns a string representing information for ArrayMovingObject.
+/*  The str method returns a string representing information for ArrayMovingObject.
     The format of the returned string is:
     Array[count=<count>;capacity=<capacity>;<MovingObject1>;...]
     MovingObject1,...: These are the MovingObjects in the array, respectively. Each
@@ -394,6 +394,38 @@ string ArrayMovingObject::str() const
     ss << "]";
     return ss.str();
 
+}
+
+/*================ Implement of Configuration class ========================*/
+/* 
+    The file consists of lines, each line can be one of the following formats. Note that the order of lines may vary.
+    1,  MAP_NUM_ROWS=<nr>
+    2,  MAP_NUM_COLS=<nc>
+    3,  MAX_NUM_MOVING_OBJECTS=<mnmo>
+    4,  ARRAY_WALLS=<aw>
+    5,  ARRAY_FAKE_WALLS=<afw>
+    6,  SHERLOCK_MOVING_RULE=<smr>
+    7,  SHERLOCK_INIT_POS=<sip>
+    8,  WATSON_MOVING_RULE=<wmr>
+    9,  WATSON_INIT_POS=<wip>
+    10, CRIMINAL_INIT_POS=<cip>
+    11, NUM_STEPS=<ns>
+*/
+Configuration::Configuration(const string & filepath)
+{
+    ifstream file(filepath);
+    string line;
+    while(getline(file, line))
+    {
+        if (line.find("MAP_NUM_ROWS=") != string::npos)
+        {
+            sscanf(line.c_str(), "MAP_NUM_ROWS=%d", &map_num_rows);
+        }
+        else if (line.find("MAP_NUM_COLS=") != string::npos)
+        {
+            
+        }
+    }
 }
 
 ////////////////////////////////////////////////

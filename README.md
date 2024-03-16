@@ -22,3 +22,4 @@ implemented Criminal class <br>
 # 16/03/2024
 implemented ArrayMovingObjects <br>
 added overloaded method for class Position <br>
+started implement Configuration <br>
