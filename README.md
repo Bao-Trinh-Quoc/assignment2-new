@@ -26,3 +26,11 @@ started implement Configuration <br>
 there is some errors in sa_tc_02_config <br>
 Configuration will need to be updated this version is just testing <br>
 Implemented Configuration --- testing <br>
+==Nice BUGS==
+Got some bugs in reading file at Sherlock_INIT_POS --- fixed <br>
+REASON: <br>
+**The sscanf expects a char* to write to, but sherlock_moving_rule and watson_moving_rule are string object**<br>
+**so this will cause undefined behavior (my program stopped at SHERLOCK_INIT_POS)**<br>
+**To fix this, i used a temp char buffer to read the string then assign it to string variable**<br>
+Probably will changed this Configuration later but now it worked and iam so happy! <br>
+Maybe needed to changed the size of buffer if needed <br>

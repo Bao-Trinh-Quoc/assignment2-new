@@ -196,8 +196,8 @@ public:
 
 class Configuration {
     friend class StudyPinkProgram;
-
-private:
+    friend class TestStudyInPink;
+private: 
     // TODO
     int map_num_rows, map_num_cols;
     int map_num_moving_objects;

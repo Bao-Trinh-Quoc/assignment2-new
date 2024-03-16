@@ -406,11 +406,12 @@ Configuration::Configuration(const string & filepath)
     ifstream file(filepath);
     if (!file)
     {
-        cerr << "Cannot open file " << filepath << endl;
+        cout << "Cannot open file " << filepath << endl;
         return;
     }
-
     string line;
+    // why need buffer ? Readme !! vdry interesting bugs about sscanf that i don't know --- 16/03/2024
+    char buffer[256];   // temp buffer
     while(getline(file, line))
     {
         if (line.find("MAP_NUM_ROWS=") != string::npos)
@@ -448,7 +449,9 @@ Configuration::Configuration(const string & filepath)
         }
         else if (line.find("SHERLOCK_MOVING_RULE=") != string::npos)
         {
-            sscanf(line.c_str(), "SHERLOCK_MOVING_RULE=%s", sherlock_moving_rule);
+            // sscanf(line.c_str(), "SHERLOCK_MOVING_RULE=%s", sherlock_moving_rule);
+            sscanf(line.c_str(), "SHERLOCK_MOVING_RULE=%s", buffer);
+            sherlock_moving_rule = buffer; // Assign to std::string 
         }
         else if (line.find("SHERLOCK_INIT_POS=") != string::npos)
         {
@@ -458,7 +461,8 @@ Configuration::Configuration(const string & filepath)
         }
         else if (line.find("WATSON_MOVING_RULE=") != string::npos)
         {
-            sscanf(line.c_str(), "WATSON_MOVING_RULE=%s", watson_moving_rule);
+            sscanf(line.c_str(), "WATSON_MOVING_RULE=%s", buffer);
+            watson_moving_rule = buffer; // Assign to std::string
         }
         else if (line.find("WATSON_INIT_POS=") != string::npos)
         {
@@ -477,6 +481,7 @@ Configuration::Configuration(const string & filepath)
         //     sscanf(line.c_str(), "NUM_STEPS=%d", &num_steps);
         // }
     }
+    file.close();
 }
 Configuration::~Configuration()
 {
