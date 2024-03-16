@@ -399,21 +399,17 @@ string ArrayMovingObject::str() const
 /*================ Implement of Configuration class ========================*/
 /* 
     The file consists of lines, each line can be one of the following formats. Note that the order of lines may vary.
-    1,  MAP_NUM_ROWS=<nr>
-    2,  MAP_NUM_COLS=<nc>
-    3,  MAX_NUM_MOVING_OBJECTS=<mnmo>
-    4,  ARRAY_WALLS=<aw>
-    5,  ARRAY_FAKE_WALLS=<afw>
-    6,  SHERLOCK_MOVING_RULE=<smr>
-    7,  SHERLOCK_INIT_POS=<sip>
-    8,  WATSON_MOVING_RULE=<wmr>
-    9,  WATSON_INIT_POS=<wip>
-    10, CRIMINAL_INIT_POS=<cip>
-    11, NUM_STEPS=<ns>
+    ...
 */
 Configuration::Configuration(const string & filepath)
 {
     ifstream file(filepath);
+    if (!file)
+    {
+        cerr << "Cannot open file " << filepath << endl;
+        return;
+    }
+
     string line;
     while(getline(file, line))
     {
@@ -423,9 +419,109 @@ Configuration::Configuration(const string & filepath)
         }
         else if (line.find("MAP_NUM_COLS=") != string::npos)
         {
-            
+            sscanf(line.c_str(), "MAP_NUM_COLS=%d", &map_num_cols);
+        }
+        else if (line.find("MAX_NUM_MOVING_OBJECTS=") != string::npos)
+        {
+            sscanf(line.c_str(), "MAX_NUM_MOVING_OBJECTS=%d", &map_num_moving_objects);
+        }
+        else if (line.find("NUM_WALLS=") != string::npos)
+        {
+            sscanf(line.c_str(), "NUM_WALLS=%d", &num_walls);
+            arr_walls = new Position[num_walls];
+        }
+        else if (line.find("ARRAY_WALLS=") != string::npos)
+        {
+            int r, c;
+            int i = 0;
+            istringstream ss(line);
+            string token;
+            while (getline(ss, token, ';'))
+            {
+                if (token.find("ARRAY_WALLS=") != string::npos)
+                {
+                    continue;
+                }
+                sscanf(token.c_str(), "(%d,%d)", &r, &c);
+                arr_walls[i++] = Position(r, c);
+            }
+        }
+        else if (line.find("SHERLOCK_MOVING_RULE=") != string::npos)
+        {
+            sscanf(line.c_str(), "SHERLOCK_MOVING_RULE=%s", sherlock_moving_rule);
+        }
+        else if (line.find("SHERLOCK_INIT_POS=") != string::npos)
+        {
+            int r, c;
+            sscanf(line.c_str(), "SHERLOCK_INIT_POS=(%d,%d)", &r, &c);
+            sherlock_init_pos = Position(r, c);
+        }
+        else if (line.find("WATSON_MOVING_RULE=") != string::npos)
+        {
+            sscanf(line.c_str(), "WATSON_MOVING_RULE=%s", watson_moving_rule);
+        }
+        else if (line.find("WATSON_INIT_POS=") != string::npos)
+        {
+            int r, c;
+            sscanf(line.c_str(), "WATSON_INIT_POS=(%d,%d)", &r, &c);
+            watson_init_pos = Position(r, c);
+        }
+        else if (line.find("CRIMINAL_INIT_POS=") != string::npos)
+        {
+            int r, c;
+            sscanf(line.c_str(), "CRIMINAL_INIT_POS=(%d,%d)", &r, &c);
+            criminal_init_pos = Position(r, c);
+        }
+        // else if (line.find("NUM_STEPS=") != string::npos)
+        // {
+        //     sscanf(line.c_str(), "NUM_STEPS=%d", &num_steps);
+        // }
+    }
+}
+Configuration::~Configuration()
+{
+    delete[] arr_walls;
+}
+/*
+    Format of this string:
+    Configuration[<attribute_name1>=<attribute_value1>;...] --- needed to be updated
+    
+     Configuration[
+    MAP_NUM_ROWS=10
+    MAP_NUM_COLS=10
+    MAX_NUM_MOVING_OBJECTS=10
+    NUM_WALLS=3
+    ARRAY_WALLS=[(1,2);(2,3);(3,4)]
+    NUM_FAKE_WALLS=1
+    ARRAY_FAKE_WALLS=[(4,5)]
+    SHERLOCK_MOVING_RULE=RUU
+    SHERLOCK_INIT_POS=(1,3)
+    SHERLOCK_INIT_HP=250
+    SHERLOCK_INIT_EXP=500
+    WATSON_MOVING_RULE=LU
+    WATSON_INIT_POS=(2,1)
+    WATSON_INIT_HP=300
+    WATSON_INIT_EXP=350
+    CRIMINAL_INIT_POS=(7,9)
+    NUM_STEPS=100
+    ]
+*/
+string Configuration::str() const
+{
+    stringstream ss;
+    ss << "Configuration[MAP_NUM_ROWS=" << map_num_rows << ";MAP_NUM_COLS=" << map_num_cols << ";MAX_NUM_MOVING_OBJECTS=" << map_num_moving_objects
+       << ";NUM_WALLS=" << num_walls << ";ARRAY_WALLS=[";
+    for (int i = 0; i < num_walls; i++)
+    {
+        ss << arr_walls[i].str();
+        if (i < num_walls - 1)
+        {
+            ss << ";";
         }
     }
+    ss << "];SHERLOCK_MOVING_RULE=" << sherlock_moving_rule << ";SHERLOCK_INIT_POS=" << sherlock_init_pos.str() << ";WATSON_MOVING_RULE=" << watson_moving_rule
+       << ";WATSON_INIT_POS=" << watson_init_pos.str() << ";CRIMINAL_INIT_POS=" << criminal_init_pos.str() << "]";
+    return ss.str();
 }
 
 ////////////////////////////////////////////////

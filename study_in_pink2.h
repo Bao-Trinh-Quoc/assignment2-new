@@ -126,7 +126,7 @@ public:
     virtual string str() const = 0;
     // additional methods
     string getName() const {    return name;   }
-    virtual int getExp() const;
+    virtual int getExp() const {return -1;}
 };
 
 class Sherlock : public MovingObject {
@@ -203,8 +203,8 @@ private:
     int map_num_moving_objects;
     int num_walls;  // Number of Wall objects
     Position * arr_walls; 
-    int num_fake_walls;  // Number of FakeWall objects
-    Position * arr_fake_walls;
+    // int num_fake_walls;  // Number of FakeWall objects
+    // Position * arr_fake_walls;
     string sherlock_moving_rule;
     Position sherlock_init_pos;
     string watson_moving_rule;

@@ -23,3 +23,6 @@ implemented Criminal class <br>
 implemented ArrayMovingObjects <br>
 added overloaded method for class Position <br>
 started implement Configuration <br>
+there is some errors in sa_tc_02_config <br>
+Configuration will need to be updated this version is just testing <br>
+Implemented Configuration --- testing <br>

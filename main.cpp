@@ -71,43 +71,43 @@ public:
         g_satc_02();
     }
 
-    static void satc_03() {
-        // Sample test for RobotC
-        cout << "----- Sample Testcase 03 -----" << endl;
-        int num_walls = 3;
-        Position arr_walls[] = {Position(1, 2), Position(2, 3), Position(3, 4)};
-        int num_fake_walls = 1;
-        Position arr_fake_walls[] = {Position(2, 0)};
+    // static void satc_03() {
+    //     // Sample test for RobotC
+    //     cout << "----- Sample Testcase 03 -----" << endl;
+    //     int num_walls = 3;
+    //     Position arr_walls[] = {Position(1, 2), Position(2, 3), Position(3, 4)};
+    //     int num_fake_walls = 1;
+    //     Position arr_fake_walls[] = {Position(2, 0)};
 
-        Map * map = new Map(10, 10, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+    //     Map * map = new Map(10, 10, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
 
-        Sherlock * sherlock = new Sherlock(1, "RUU", Position(1, 3), map, 250, 450);
-        Watson * watson = new Watson(2, "LU", Position(2, 1), map, 300, 350);
-        Criminal * criminal = new Criminal(0, Position(7, 9), map, sherlock, watson);
-        criminal->move();
+    //     Sherlock * sherlock = new Sherlock(1, "RUU", Position(1, 3), map, 250, 450);
+    //     Watson * watson = new Watson(2, "LU", Position(2, 1), map, 300, 350);
+    //     Criminal * criminal = new Criminal(0, Position(7, 9), map, sherlock, watson);
+    //     criminal->move();
 
-        RobotC * robotC = new RobotC(3, Position(7,9), map, criminal);
-        cout << "Current position of Criminal: " << criminal->str() << endl;
-        cout << "Criminal makes a move" << endl;
-        criminal->move();
-        cout << "New position of Criminal: " << criminal->str() << endl;
+    //     RobotC * robotC = new RobotC(3, Position(7,9), map, criminal);
+    //     cout << "Current position of Criminal: " << criminal->str() << endl;
+    //     cout << "Criminal makes a move" << endl;
+    //     criminal->move();
+    //     cout << "New position of Criminal: " << criminal->str() << endl;
 
-        cout << "Current position of robotC: " << robotC->str() << endl;
-        cout << "RobotC makes a move" << endl;
-        robotC->move();
-        cout << "New position of robotC: " << robotC->str() << endl;
+    //     cout << "Current position of robotC: " << robotC->str() << endl;
+    //     cout << "RobotC makes a move" << endl;
+    //     robotC->move();
+    //     cout << "New position of robotC: " << robotC->str() << endl;
 
-        delete sherlock;
-        delete watson;
-        delete criminal;
-        delete map;
-        delete robotC;
-    }
+    //     delete sherlock;
+    //     delete watson;
+    //     delete criminal;
+    //     delete map;
+    //     delete robotC;
+    // }
 };
 
 int main(int argc, const char * argv[]) {
     // TestStudyInPink::satc_01();
-    // TestStudyInPink::satc_02();
+    TestStudyInPink::satc_02();
     // TestStudyInPink::satc_03();
     return 0;
 }
