@@ -527,7 +527,6 @@ Configuration::~Configuration()
 /*
     Format of this string:
     Configuration[<attribute_name1>=<attribute_value1>;...] --- needed to be updated
-    
      Configuration[
     MAP_NUM_ROWS=10
     MAP_NUM_COLS=10
@@ -561,8 +560,20 @@ string Configuration::str() const
             ss << ";";
         }
     }
-    ss << "] SHERLOCK_MOVING_RULE=" << sherlock_moving_rule << " SHERLOCK_INIT_POS=" << sherlock_init_pos.str() << " WATSON_MOVING_RULE=" << watson_moving_rule
-       << " WATSON_INIT_POS=" << watson_init_pos.str() << " CRIMINAL_INIT_POS=" << criminal_init_pos.str() << "]";
+    ss << "] NUM_FAKE_WALLS=" << num_fake_walls << " ARRAY_FAKE_WALLS=[";
+    for (int i = 0; i < num_fake_walls; i++)
+    {
+        ss << arr_fake_walls[i].str();
+        if (i < num_fake_walls - 1)
+        {
+            ss << ";";
+        }
+    }
+
+    ss << "] SHERLOCK_MOVING_RULE=" << sherlock_moving_rule << " SHERLOCK_INIT_POS=" << sherlock_init_pos.str() << " SHERLOCK_INIT_HP=" << sherlock_init_hp
+       << " SHERLOCK_INIT_EXP=" << sherlock_init_exp << " WATSON_MOVING_RULE=" << watson_moving_rule << " WATSON_INIT_POS=" << watson_init_pos.str()
+       << " WATSON_INIT_HP=" << watson_init_hp << " WATSON_INIT_EXP=" << watson_init_exp << " CRIMINAL_INIT_POS=" << criminal_init_pos.str()
+       << " NUM_STEPS=" << num_steps << "]";
     return ss.str();
 }
 

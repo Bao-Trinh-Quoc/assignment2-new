@@ -15,7 +15,9 @@ using namespace std;
 
 void g_satc_02() { // global
     cout << "----- Sample Testcase 02 -----" << endl;
-    Configuration * config = new Configuration("sa_tc_02_config");
+    // Configuration * config = new Configuration("sa_tc_02_config");
+    /* my testcase */
+    Configuration * config = new Configuration("my_sa_tc_02_config");
     cout << config->str() << endl;
     delete config;
 }
