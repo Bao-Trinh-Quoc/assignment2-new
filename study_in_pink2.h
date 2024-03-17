@@ -46,6 +46,7 @@ enum ElementType { PATH, WALL, FAKE_WALL };
 enum RobotType { C=0, S, W, SW };
 
 class MapElement {
+    friend class TestStudyInPink;
 protected:
     ElementType type;
 public:
@@ -55,18 +56,21 @@ public:
 };
 
 class Path : public MapElement {
+    friend class TestStudyInPink;
 public:
     Path() : MapElement(PATH) {};
     ~Path() {};
 };
 
 class Wall : public MapElement {
+    friend class TestStudyInPink;
 public:
     Wall() : MapElement(WALL) {};
     ~Wall() {};
 };
 
 class FakeWall : public MapElement {
+    friend class TestStudyInPink;
 private:
     int reg_exp;
 public:
@@ -78,6 +82,7 @@ public:
 };
 
 class Map {
+    friend class TestStudyInPink;
 private:
     int num_rows, num_cols;
     MapElement *** elements;
@@ -88,6 +93,7 @@ public:
 };
 
 class Position {
+    friend class TestStudyInPink;
 private:
     int r, c;
 public:
@@ -110,6 +116,7 @@ public:
 };
 
 class MovingObject {
+    friend class TestStudyInPink;
 protected:
     int index;
     Position pos;
@@ -130,6 +137,7 @@ public:
 };
 
 class Sherlock : public MovingObject {
+    friend class TestStudyInPink;
 private:
     // TODO
     string moving_rule;
@@ -146,6 +154,7 @@ public:
 };
 
 class Watson : public MovingObject {
+    friend class TestStudyInPink;
 private:
     // TODO
     string moving_rule;
@@ -162,6 +171,7 @@ public:
 };
 
 class Criminal : public MovingObject {
+    friend class TestStudyInPink;
 private:
     // TODO
     Sherlock * sherlock;
@@ -176,6 +186,7 @@ public:
 };
 
 class ArrayMovingObject {
+    friend class TestStudyInPink;
 private:
     // TODO
 private:
@@ -224,6 +235,7 @@ public:
 // Robot, BaseItem, BaseBag,...
 
 class StudyPinkProgram {
+    friend class TestStudyInPink;
 private:
     // Sample attributes
     Configuration * config;

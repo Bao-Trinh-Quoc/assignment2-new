@@ -37,3 +37,4 @@ Maybe needed to changed the size of buffer if needed <br>
 # 17/03/2024
 Improved COnfiugration to cover more options <br>
 Added my own sa_tc_02 for Configuration and changed how str in Configuration will output(from ";" to " ") <br>
+TestStudyInPink is friend of everyone! <br>
