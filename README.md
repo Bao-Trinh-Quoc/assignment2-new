@@ -38,3 +38,6 @@ Maybe needed to changed the size of buffer if needed <br>
 Improved COnfiugration to cover more options <br>
 Added my own sa_tc_02 for Configuration and changed how str in Configuration will output(from ";" to " ") <br>
 TestStudyInPink is friend of everyone! <br>
+corrected typos in constructor of Sherlock, Watson and Criminal pos -> init_pos <br>
+Changed exp of fake wall in Map constructor when created (r ∗257+c∗139+89)%900+1 <br>
+Tested sa_tc_01 yayy <br>

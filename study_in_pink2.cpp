@@ -42,7 +42,8 @@ Map::Map(int num_rows, int num_cols, int num_walls, Position * array_walls, int 
         int row = array_fake_walls[i].getRow();
         int col = array_fake_walls[i].getCol();
         delete elements[row][col];
-        elements[row][col] = new FakeWall();
+        int fakeWallExp = (row * 257 + col * 139 + 89) % 900 + 1;
+        elements[row][col] = new FakeWall(fakeWallExp);
     }
 }
 Map::~Map()
@@ -151,8 +152,8 @@ bool Position::isEqual(const Position & pos) const
 const Position Position::npos = Position(-1, -1);
 
 /*================ Implement of Sherlock class ========================*/
-Sherlock::Sherlock(int index, const string & moving_rule, const Position & pos, Map * map, int init_hp, int init_exp)
-        : MovingObject(index, pos, map, "Sherlock"), moving_rule(moving_rule) 
+Sherlock::Sherlock(int index, const string & moving_rule, const Position & init_pos, Map * map, int init_hp, int init_exp)
+        : MovingObject(index, init_pos, map, "Sherlock"), moving_rule(moving_rule) 
 {
     // init_hp must in within range [0, 500]
     if (init_hp < 0)
@@ -224,7 +225,7 @@ string Sherlock::str() const
 
 /*================ Implement of Watson class ========================*/
 Watson::Watson(int index, const string & moving_rule, const Position & init_pos, Map * map, int init_hp, int init_exp)
-        : MovingObject(index, pos, map, "Watson"), moving_rule(moving_rule)
+        : MovingObject(index, init_pos, map, "Watson"), moving_rule(moving_rule)
 {
     // init_hp must in within range [0, 500]
     if (init_hp < 0)
@@ -287,7 +288,7 @@ string Watson::str() const
 
 /*================ Implement of Criminal class ========================*/
 Criminal::Criminal(int index, const Position & init_pos, Map * map, Sherlock * sherlock, Watson * watson)
-        : MovingObject(index, pos, map, "Criminal"), sherlock(sherlock), watson(watson)
+        : MovingObject(index, init_pos, map, "Criminal"), sherlock(sherlock), watson(watson)
 {}
 /*  The criminal has cameras monitoring both Sherlock and Watson in this maze.
     Therefore, unlike the detective couple’s way of moving, the criminal will
