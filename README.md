@@ -34,3 +34,5 @@ REASON: <br>
 **To fix this, i used a temp char buffer to read the string then assign it to string variable**<br>
 Probably will changed this Configuration later but now it worked and iam so happy! <br>
 Maybe needed to changed the size of buffer if needed <br>
+# 17/03/2024
+Improved COnfiugration to cover more options <br>

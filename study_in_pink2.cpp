@@ -447,6 +447,27 @@ Configuration::Configuration(const string & filepath)
                 arr_walls[i++] = Position(r, c);
             }
         }
+        else if (line.find("NUM_FAKE_WALLS=") != string::npos)
+        {
+            sscanf(line.c_str(), "NUM_FAKE_WALLS=%d", &num_fake_walls);
+            arr_fake_walls = new Position[num_fake_walls];
+        }
+        else if (line.find("ARRAY_FAKE_WALLS=") != string::npos)
+        {
+            int r, c;
+            int i = 0;
+            istringstream ss(line);
+            string token;
+            while (getline(ss, token, ';'))
+            {
+                if (token.find("ARRAY_FAKE_WALLS=") != string::npos)
+                {
+                    continue;
+                }
+                sscanf(token.c_str(), "(%d,%d)", &r, &c);
+                arr_fake_walls[i++] = Position(r, c);
+            }
+        }
         else if (line.find("SHERLOCK_MOVING_RULE=") != string::npos)
         {
             // sscanf(line.c_str(), "SHERLOCK_MOVING_RULE=%s", sherlock_moving_rule);
@@ -459,6 +480,14 @@ Configuration::Configuration(const string & filepath)
             sscanf(line.c_str(), "SHERLOCK_INIT_POS=(%d,%d)", &r, &c);
             sherlock_init_pos = Position(r, c);
         }
+        else if (line.find("SHERLOCK_INIT_HP=") != string::npos)
+        {
+            sscanf(line.c_str(), "SHERLOCK_INIT_HP=%d", &sherlock_init_hp);
+        }
+        else if (line.find("SHERLOCK_INIT_EXP=") != string::npos)
+        {
+            sscanf(line.c_str(), "SHERLOCK_INIT_EXP=%d", &sherlock_init_exp);
+        }
         else if (line.find("WATSON_MOVING_RULE=") != string::npos)
         {
             sscanf(line.c_str(), "WATSON_MOVING_RULE=%s", buffer);
@@ -470,16 +499,24 @@ Configuration::Configuration(const string & filepath)
             sscanf(line.c_str(), "WATSON_INIT_POS=(%d,%d)", &r, &c);
             watson_init_pos = Position(r, c);
         }
+        else if (line.find("WATSON_INIT_HP=") != string::npos)
+        {
+            sscanf(line.c_str(), "WATSON_INIT_HP=%d", &watson_init_hp);
+        }
+        else if (line.find("WATSON_INIT_EXP=") != string::npos)
+        {
+            sscanf(line.c_str(), "WATSON_INIT_EXP=%d", &watson_init_exp);
+        }
         else if (line.find("CRIMINAL_INIT_POS=") != string::npos)
         {
             int r, c;
             sscanf(line.c_str(), "CRIMINAL_INIT_POS=(%d,%d)", &r, &c);
             criminal_init_pos = Position(r, c);
         }
-        // else if (line.find("NUM_STEPS=") != string::npos)
-        // {
-        //     sscanf(line.c_str(), "NUM_STEPS=%d", &num_steps);
-        // }
+        else if (line.find("NUM_STEPS=") != string::npos)
+        {
+            sscanf(line.c_str(), "NUM_STEPS=%d", &num_steps);
+        }
     }
     file.close();
 }
@@ -514,8 +551,8 @@ Configuration::~Configuration()
 string Configuration::str() const
 {
     stringstream ss;
-    ss << "Configuration[MAP_NUM_ROWS=" << map_num_rows << ";MAP_NUM_COLS=" << map_num_cols << ";MAX_NUM_MOVING_OBJECTS=" << map_num_moving_objects
-       << ";NUM_WALLS=" << num_walls << ";ARRAY_WALLS=[";
+    ss << "Configuration[MAP_NUM_ROWS=" << map_num_rows << " MAP_NUM_COLS=" << map_num_cols << " MAX_NUM_MOVING_OBJECTS=" << map_num_moving_objects
+       << " NUM_WALLS=" << num_walls << " ARRAY_WALLS=[";
     for (int i = 0; i < num_walls; i++)
     {
         ss << arr_walls[i].str();
@@ -524,8 +561,8 @@ string Configuration::str() const
             ss << ";";
         }
     }
-    ss << "];SHERLOCK_MOVING_RULE=" << sherlock_moving_rule << ";SHERLOCK_INIT_POS=" << sherlock_init_pos.str() << ";WATSON_MOVING_RULE=" << watson_moving_rule
-       << ";WATSON_INIT_POS=" << watson_init_pos.str() << ";CRIMINAL_INIT_POS=" << criminal_init_pos.str() << "]";
+    ss << "] SHERLOCK_MOVING_RULE=" << sherlock_moving_rule << " SHERLOCK_INIT_POS=" << sherlock_init_pos.str() << " WATSON_MOVING_RULE=" << watson_moving_rule
+       << " WATSON_INIT_POS=" << watson_init_pos.str() << " CRIMINAL_INIT_POS=" << criminal_init_pos.str() << "]";
     return ss.str();
 }
 

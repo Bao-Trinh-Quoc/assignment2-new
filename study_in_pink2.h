@@ -203,11 +203,15 @@ private:
     int map_num_moving_objects;
     int num_walls;  // Number of Wall objects
     Position * arr_walls; 
-    // int num_fake_walls;  // Number of FakeWall objects
-    // Position * arr_fake_walls;
+    int num_fake_walls;  // Number of FakeWall objects
+    Position * arr_fake_walls;
     string sherlock_moving_rule;
     Position sherlock_init_pos;
+    int sherlock_init_hp;
+    int sherlock_init_exp;
     string watson_moving_rule;
+    int watson_init_hp;
+    int watson_init_exp;
     Position watson_init_pos;
     Position criminal_init_pos;
     int num_steps;
