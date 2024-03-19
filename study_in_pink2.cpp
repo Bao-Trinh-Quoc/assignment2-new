@@ -107,8 +107,13 @@ bool Map::isValid(const Position & pos, MovingObject * mv_obj) const
             else if (mv_obj->getName() == "Sherlock")
             {
                 return true;
-            }
+            }   // Check if the object is a Criminal
             else if (mv_obj->getName() == "Criminal")
+            {
+                return true;
+            }
+            else if (mv_obj->getName() == "RobotC" || mv_obj->getName() == "RobotS" || mv_obj->getName() == "RobotW"
+                    || mv_obj->getName() == "RobotSW")
             {
                 return true;
             }
@@ -326,6 +331,8 @@ Position Criminal::getNextPosition()
                 maxDistance = totalDistance;
                 next_pos = temp;
             }
+            else 
+                return Position::npos;
         }
     }
     return next_pos;
@@ -335,8 +342,13 @@ void Criminal::move()
     Position next_pos = getNextPosition();
     if (next_pos != Position::npos)
     {
+        prev_pos = pos;     // Save the previous position
         pos = next_pos;
     }
+}
+Position Criminal::getPreviousPosition() const
+{
+    return prev_pos;
 }
 // Criminal[index=<index>;pos=<pos>]
 string Criminal::str() const
@@ -578,6 +590,51 @@ string Configuration::str() const
     return ss.str();
 }
 
+/*================ Implement of RobotC class ========================*/
+RobotC::RobotC(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type)
+        : MovingObject(index, init_pos, map, "RobotC"), robot_type(robot_type), criminal(Criminal)
+{
+    item = nullptr;
+}
+/*
+    Moves to the next location in the same location as the criminal
+*/
+Position RobotC::getNextPosition()
+{
+    if (map->isValid(criminal->getPreviousPosition(), this))
+    {
+        return criminal->getPreviousPosition();
+    }
+    return Position::npos;
+}
+void RobotC::move()
+{
+    Position next_pos = getNextPosition();
+    if (next_pos != Position::npos)
+    {
+        pos = next_pos;
+    }
+}
+int RobotC::getDistance(Sherlock * sherlock)
+{
+    return abs(pos.getRow() - sherlock->getCurrentPosition().getRow()) + abs(pos.getCol() - sherlock->getCurrentPosition().getCol());
+}
+int RobotC::getDistance(Watson * watson)
+{
+    return abs(pos.getRow() - watson->getCurrentPosition().getRow()) + abs(pos.getCol() - watson->getCurrentPosition().getCol());
+}
+/*  Robot[pos=<pos>;type=<robot_type>;dist=<dist>]
+    <pos> prints the current position of the Robot
+    robot_type prints a value that can be C, S, W or SW
+    dist prints the distance to Sherlock, Watson or the sum of both depending on whether
+    the robot is S, W or SW. If the robot type is RobotC, print an empty string.
+*/
+string RobotC::str() const
+{
+    stringstream ss;
+    ss << "RobotC[pos=" << pos.str() << ";type=C;dist=]";
+    return ss.str();
+}
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
 ////////////////////////////////////////////////

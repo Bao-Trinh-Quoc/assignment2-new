@@ -176,19 +176,19 @@ private:
     // TODO
     Sherlock * sherlock;
     Watson  * watson;
+    Position prev_pos;
 public:
     Criminal(int index, const Position & init_pos, Map * map, Sherlock * sherlock, Watson * watson);
     Position getCurrentPosition() const {   return pos; }
     Position getNextPosition();
     void move();
     string str() const;
-
+    // additional methods
+    Position getPreviousPosition() const;
 };
 
 class ArrayMovingObject {
     friend class TestStudyInPink;
-private:
-    // TODO
 private:
     MovingObject ** arr_mv_objs;
     int count;
@@ -202,7 +202,6 @@ public:
     MovingObject * get(int index) const {   return arr_mv_objs[index];}
     // return current number of elements in the array
     int size() const {   return count;   }
-    
 };
 
 class Configuration {
@@ -232,7 +231,28 @@ public:
     string str() const;
 };
 
-// Robot, BaseItem, BaseBag,...
+// Robot
+class RobotC : public MovingObject 
+{
+    friend class TestStudyInPink;
+private:
+    RobotType robot_type;
+    BaseItem * item;
+    Criminal * criminal;
+public:
+    RobotC(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type = C);
+    Position getCurrentPosition() const {   return pos; }
+    Position getNextPosition();
+    void move();
+    int getDistance(Sherlock * sherlock);
+    int getDistance(Watson * watson);
+    string str() const;
+};
+
+
+// BaseItem, BaseBag,...
+
+
 
 class StudyPinkProgram {
     friend class TestStudyInPink;
