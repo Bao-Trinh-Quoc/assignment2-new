@@ -45,4 +45,5 @@ Tested sa_tc_01 yayy <br>
 if the position that Criminal will go to is not valid, getNextPosition of Criminal should return Position::npos <br>
 **The process of creating Robot will put in class Criminal or elsewhere ?** <br>
 added new method for Criminal getPrevPosition and added prevPos attributes <br>
-implemented RobotC
+implemented RobotC <br>
+testing git and github <br>
