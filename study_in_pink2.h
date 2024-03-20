@@ -232,15 +232,26 @@ public:
 };
 
 // Robot
-class RobotC : public MovingObject 
+class Robot : public MovingObject
 {
     friend class TestStudyInPink;
-private:
+public:
     RobotType robot_type;
     BaseItem * item;
     Criminal * criminal;
 public:
-    RobotC(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type = C);
+    Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type);
+    virtual Position getCurrentPosition() const = 0;
+    virtual Position getNextPosition()  = 0;
+    virtual void move() = 0;
+    virtual string str() const = 0;
+};
+
+class RobotC : public Robot
+{
+    friend class TestStudyInPink;
+public:
+    RobotC(int index, const Position & init_pos, Map * map, Criminal * Criminal,  RobotType robot_type = C);
     Position getCurrentPosition() const {   return pos; }
     Position getNextPosition();
     void move();
@@ -249,6 +260,26 @@ public:
     string str() const;
 };
 
+class RobotS : public Robot
+{
+    friend class TestStudyInPink;
+private:
+    Sherlock * sherlock;
+public:
+    RobotS(int index, const Position & init_pos, Map * map, Criminal * Criminal, Sherlock * sherlock, RobotType robot_type = S);
+    Position getCurrentPosition() const {   return pos; }
+    Position getNextPosition();
+    void move();
+    int getDistance(Sherlock * sherlock);
+    string str() const;
+};
+
+class RobotW : public Robot
+{
+    friend class TestStudyInPink;
+private:
+
+};
 
 // BaseItem, BaseBag,...
 

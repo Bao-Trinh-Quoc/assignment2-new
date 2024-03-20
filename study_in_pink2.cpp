@@ -590,12 +590,15 @@ string Configuration::str() const
     return ss.str();
 }
 
+/*================ Implement of Robot class ========================*/
+Robot::Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type)
+        : MovingObject(index, init_pos, map, "Robot"), robot_type(robot_type), criminal(Criminal)
+{}
+
 /*================ Implement of RobotC class ========================*/
-RobotC::RobotC(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type)
-        : MovingObject(index, init_pos, map, "RobotC"), robot_type(robot_type), criminal(Criminal)
-{
-    item = nullptr;
-}
+RobotC::RobotC(int index, const Position & init_pos, Map * map, Criminal * Criminal,  RobotType robot_type)
+        : Robot(index, init_pos, map, Criminal, robot_type)
+{}
 /*
     Moves to the next location in the same location as the criminal
 */

@@ -47,3 +47,7 @@ if the position that Criminal will go to is not valid, getNextPosition of Crimin
 added new method for Criminal getPrevPosition and added prevPos attributes <br>
 implemented RobotC <br>
 testing git and github <br>
+# 20/03/2024
+Changed the order of constructor in RobotC <br>
+then changed it back (because main.cpp got error at tc_03) <br>
+Created Robot class <br>
