@@ -307,8 +307,8 @@ Position Criminal::getNextPosition()
 {
     // U, L, D, R
     Position directions[] = {Position(-1, 0), Position(0, -1), Position(1, 0), Position(0, 1)};
-    int maxDistance = -1;
-    Position next_pos = pos;
+    int maxDistance = INT_MIN;
+    Position next_pos = Position::npos;
 
     for (int i = 0; i < 4; i++)
     {
@@ -322,17 +322,17 @@ Position Criminal::getNextPosition()
                                 + abs(ydir - watson->getCurrentPosition().getCol());
         // Calculate total distance
         int totalDistance = criminal_sherlock + criminal_watson;
+        // Check if the new position is valid
+        Position temp = Position(xdir, ydir);
+        if (!map->isValid(temp, this))
+        {
+            continue;   // Skip the invalid position
+        }
         // Update maxDistance and next position
         if (totalDistance > maxDistance)
         {
-            Position temp = Position(xdir, ydir);
-            if (map->isValid(temp, this))
-            {
-                maxDistance = totalDistance;
-                next_pos = temp;
-            }
-            else 
-                return Position::npos;
+            maxDistance = totalDistance;
+            next_pos = temp;
         }
     }
     return next_pos;
@@ -593,7 +593,10 @@ string Configuration::str() const
 /*================ Implement of Robot class ========================*/
 Robot::Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type)
         : MovingObject(index, init_pos, map, "Robot"), robot_type(robot_type), criminal(Criminal)
-{}
+{
+    // for later use 
+    item = nullptr;
+}
 
 /*================ Implement of RobotC class ========================*/
 RobotC::RobotC(int index, const Position & init_pos, Map * map, Criminal * Criminal,  RobotType robot_type)
@@ -618,11 +621,11 @@ void RobotC::move()
         pos = next_pos;
     }
 }
-int RobotC::getDistance(Sherlock * sherlock)
+int RobotC::getDistance(Sherlock * sherlock) const
 {
     return abs(pos.getRow() - sherlock->getCurrentPosition().getRow()) + abs(pos.getCol() - sherlock->getCurrentPosition().getCol());
 }
-int RobotC::getDistance(Watson * watson)
+int RobotC::getDistance(Watson * watson) const 
 {
     return abs(pos.getRow() - watson->getCurrentPosition().getRow()) + abs(pos.getCol() - watson->getCurrentPosition().getCol());
 }
@@ -636,6 +639,184 @@ string RobotC::str() const
 {
     stringstream ss;
     ss << "RobotC[pos=" << pos.str() << ";type=C;dist=]";
+    return ss.str();
+}
+/*================ Implement of RobotS class ========================*/
+RobotS::RobotS(int index, const Position & init_pos, Map * map, Criminal * Criminal, Sherlock * sherlock, RobotType robot_type)
+        : Robot(index, init_pos, map, Criminal, robot_type), sherlock(sherlock)
+{}
+
+/*
+    Move to the next location 1 unit away from the original and closest to Sherlock’s next location.
+    the distance referred to is the Manhattan distance
+    If there are multiple nearest locations, the order of selection clockwise rotation
+    starting from the upwards direction, and selecting the first location
+*/
+Position RobotS::getNextPosition()
+{
+    // U R D L 
+    Position directions[] = {Position(-1, 0), Position(0, 1), Position(1, 0), Position(0, -1)};
+    int nearestDistance = INT_MAX;
+    Position next_pos = Position::npos;
+
+    for (int i = 0; i < 4; i++)
+    {
+        // Calculate new RobotS position
+        int xdir = pos.getRow() + directions[i].getRow();
+        int ydir = pos.getCol() + directions[i].getCol();
+        // Calculate distance between RobotS - sherlock
+        int distance = abs(xdir - sherlock->getCurrentPosition().getRow()) + abs(ydir - sherlock->getCurrentPosition().getCol());
+        Position temp = Position(xdir, ydir);
+        // Check if the new position is valid
+        if (!map->isValid(temp, this))
+        {
+            continue;   // Skip the invalid position
+        }
+        // Update nearestDistance and next position
+        if (distance < nearestDistance)
+        {
+            nearestDistance = distance;
+            next_pos = temp;
+        }
+    }
+    
+    return next_pos;
+}
+void RobotS::move()
+{
+    Position next_pos = getNextPosition();
+    if (next_pos != Position::npos)
+    {
+        pos = next_pos;
+    }
+}
+int RobotS::getDistance(Sherlock * sherlock) const
+{
+    return abs(pos.getRow() - sherlock->getCurrentPosition().getRow()) + abs(pos.getCol() - sherlock->getCurrentPosition().getCol());
+}
+string RobotS::str() const
+{
+    stringstream ss;
+    ss << "RobotS[pos=" << pos.str() << ";type=S;dist=" << getDistance(sherlock) << "]";
+    return ss.str();
+}
+/*================ Implement of RobotW class ========================*/
+RobotW::RobotW(int index, const Position & init_pos, Map * map, Criminal * Criminal, Watson * watson, RobotType robot_type)
+        : Robot(index, init_pos, map, Criminal, robot_type), watson(watson)
+{}
+/*
+    Move to the next location 1 unit away from the original and closest to Watson’s next location.
+    the distance referred to is the Manhattan distance
+    If there are multiple nearest locations, the order of selection clockwise rotation
+    starting from the upwards direction, and selecting the first location
+*/
+Position RobotW::getNextPosition()
+{
+    // U R D L 
+    Position directions[] = {Position(-1, 0), Position(0, 1), Position(1, 0), Position(0, -1)};
+    int nearestDistance = INT_MAX;
+    Position next_pos = Position::npos;
+
+    for (int i = 0; i < 4; i++)
+    {
+        // Calculate new RobotW position
+        int xdir = pos.getRow() + directions[i].getRow();
+        int ydir = pos.getCol() + directions[i].getCol();
+        // Calculate distance between RobotW - watson
+        int distance = abs(xdir - watson->getCurrentPosition().getRow()) + abs(ydir - watson->getCurrentPosition().getCol());
+        Position temp = Position(xdir, ydir);
+        // Check if the new position is valid
+        if (!map->isValid(temp, this))
+        {
+            continue;   // Skip the invalid position
+        }
+        // Update nearestDistance and next position
+        if (distance < nearestDistance)
+        {
+            nearestDistance = distance;
+            next_pos = temp;
+        }
+    }
+    
+    return next_pos;
+}
+void RobotW::move()
+{
+    Position next_pos = getNextPosition();
+    if (next_pos != Position::npos)
+    {
+        pos = next_pos;
+    }
+}
+int RobotW::getDistance(Watson * watson) const
+{
+    return abs(pos.getRow() - watson->getCurrentPosition().getRow()) + abs(pos.getCol() - watson->getCurrentPosition().getCol());
+}
+string RobotW::str() const
+{
+    stringstream ss;
+    ss << "RobotW[pos=" << pos.str() << ";type=W;dist=" << getDistance(watson) << "]";
+    return ss.str();
+}
+/*================ Implement of RobotSW class ========================*/
+RobotSW::RobotSW(int index, const Position & init_pos, Map * map, Criminal * Criminal, Sherlock * sherlock, Watson * watson, RobotType robot_type)
+        : Robot(index, init_pos, map, Criminal, robot_type), sherlock(sherlock), watson(watson)
+{}
+/*
+    Move to the next location that is 2 units away from the original and has
+    the closest total distance to both Sherlock and Watson. If there are multiple suitable
+    positions, the order of selection is as if in RobotS.
+*/
+Position RobotSW::getNextPosition()
+{
+    // U R D L 
+    Position directions[] = {Position(-2, 0), Position(0, 2), Position(2, 0), Position(0, -2)};
+    int nearestDistance = INT_MAX;
+    Position next_pos = Position::npos;
+
+    for (int i = 0; i < 4; i++)
+    {
+        // Calculate new RobotSW position
+        int xdir = pos.getRow() + directions[i].getRow();
+        int ydir = pos.getCol() + directions[i].getCol();
+        // Calculate distance between RobotSW - sherlock and RobotSW - watson
+        int distance_sherlock = abs(xdir - sherlock->getCurrentPosition().getRow()) + abs(ydir - sherlock->getCurrentPosition().getCol());
+        int distance_watson   = abs(xdir - watson->getCurrentPosition().getRow()) + abs(ydir - watson->getCurrentPosition().getCol());
+        int totalDistance = distance_sherlock + distance_watson;
+        Position temp = Position(xdir, ydir);
+        // Check if the new position is valid
+        if (!map->isValid(temp, this))
+        {
+            continue;   // Skip the invalid position
+        }
+        // Update nearestDistance and next position
+        if (totalDistance < nearestDistance)
+        {
+            nearestDistance = totalDistance;
+            next_pos = temp;
+        }
+    }
+    
+    return next_pos;
+}
+void RobotSW::move()
+{
+    Position next_pos = getNextPosition();
+    if (next_pos != Position::npos)
+    {
+        pos = next_pos;
+    }
+}
+int RobotSW::getDistance(Sherlock * sherlock, Watson * watson) const
+{
+    int distance_sherlock = abs(pos.getRow() - sherlock->getCurrentPosition().getRow()) + abs(pos.getCol() - sherlock->getCurrentPosition().getCol());
+    int distance_watson   = abs(pos.getRow() - watson->getCurrentPosition().getRow()) + abs(pos.getCol() - watson->getCurrentPosition().getCol());
+    return distance_sherlock + distance_watson;
+}
+string RobotSW::str() const
+{
+    stringstream ss;
+    ss << "RobotSW[pos=" << pos.str() << ";type=SW;dist=" << getDistance(sherlock, watson) << "]";
     return ss.str();
 }
 ////////////////////////////////////////////////

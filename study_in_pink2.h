@@ -195,7 +195,7 @@ private:
     int capacity;
 public:
     ArrayMovingObject(int capacity);
-    ~ArrayMovingObject() ;
+    ~ArrayMovingObject();
     bool isFull() const {   return count == capacity;   }
     bool add(MovingObject * mv_obj);
     string str() const;
@@ -255,8 +255,8 @@ public:
     Position getCurrentPosition() const {   return pos; }
     Position getNextPosition();
     void move();
-    int getDistance(Sherlock * sherlock);
-    int getDistance(Watson * watson);
+    int getDistance(Sherlock * sherlock) const;
+    int getDistance(Watson * watson) const ;
     string str() const;
 };
 
@@ -270,7 +270,7 @@ public:
     Position getCurrentPosition() const {   return pos; }
     Position getNextPosition();
     void move();
-    int getDistance(Sherlock * sherlock);
+    int getDistance(Sherlock * sherlock) const;
     string str() const;
 };
 
@@ -278,11 +278,33 @@ class RobotW : public Robot
 {
     friend class TestStudyInPink;
 private:
-
+    Watson * watson;
+public:
+    RobotW(int index, const Position & init_pos, Map * map, Criminal * Criminal, Watson * watson, RobotType robot_type = W);
+    Position getCurrentPosition() const {   return pos; }
+    Position getNextPosition();
+    void move();
+    int getDistance(Watson * watson) const;
+    string str() const;
 };
 
-// BaseItem, BaseBag,...
+class RobotSW : public Robot
+{
+    friend class TestStudyInPink;
+private:
+    Sherlock * sherlock;
+    Watson * watson;
+public:
+    RobotSW(int index, const Position & init_pos, Map * map, Criminal * Criminal, Sherlock * sherlock, Watson * watson, RobotType robot_type = SW);
+    Position getCurrentPosition() const {   return pos; }
+    Position getNextPosition();
+    void move();
+    int getDistance(Sherlock * sherlock, Watson * watson) const;
+    string str() const;
+};
 
+
+// BaseItem, BaseBag,...
 
 
 class StudyPinkProgram {

@@ -51,3 +51,7 @@ testing git and github <br>
 Changed the order of constructor in RobotC <br>
 then changed it back (because main.cpp got error at tc_03) <br>
 Created Robot class <br>
+Changed logic in getNextPosition of Criminal. if the position that Criminal will go to is invalid, shoudl assign to npos not return <br>
+Changed the implementation of getNextPosition in Criminal to handle logic problem <br>
+**Very strange behavior can't run sa_tc03 after sa_tc01 but reverse worked ---> problem in sa_tc01** <br>
+Implemented 4 different types of Robot <br>

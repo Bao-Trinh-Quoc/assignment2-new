@@ -61,7 +61,7 @@ public:
         arr_mv_objs->add(sherlock);
         arr_mv_objs->add(watson);
         cout << arr_mv_objs->str() << endl;
-        
+
         delete arr_mv_objs;
         delete sherlock;
         delete watson;
