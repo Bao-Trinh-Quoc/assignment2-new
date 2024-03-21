@@ -136,7 +136,15 @@ public:
     virtual int getExp() const {return -1;}
 };
 
-class Sherlock : public MovingObject {
+class Character : public MovingObject
+{
+    friend class TestStudyInPink;
+public:
+    Character(int index, const Position & pos, Map * map, const string & name)
+        : MovingObject(index, pos, map, name) {};
+};
+
+class Sherlock : public Character {
     friend class TestStudyInPink;
 private:
     // TODO
@@ -153,7 +161,7 @@ public:
     int getExp() const {    return exp;   }
 };
 
-class Watson : public MovingObject {
+class Watson : public Character {
     friend class TestStudyInPink;
 private:
     // TODO
@@ -170,7 +178,7 @@ public:
     int getExp() const {    return exp;   }
 };
 
-class Criminal : public MovingObject {
+class Criminal : public Character {
     friend class TestStudyInPink;
 private:
     // TODO
@@ -241,10 +249,6 @@ public:
     Criminal * criminal;
 public:
     Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type);
-    virtual Position getCurrentPosition() const = 0;
-    virtual Position getNextPosition()  = 0;
-    virtual void move() = 0;
-    virtual string str() const = 0;
 };
 
 class RobotC : public Robot

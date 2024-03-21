@@ -55,3 +55,6 @@ Changed logic in getNextPosition of Criminal. if the position that Criminal will
 Changed the implementation of getNextPosition in Criminal to handle logic problem <br>
 **Very strange behavior can't run sa_tc03 after sa_tc01 but reverse worked ---> problem in sa_tc01** <br>
 Implemented 4 different types of Robot <br>
+# 21/03/2024
+Simplified Robot class <br>
+Implemented Character class receiced MovingObject as an ancestor class <br>
