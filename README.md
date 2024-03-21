@@ -58,3 +58,5 @@ Implemented 4 different types of Robot <br>
 # 21/03/2024
 Simplified Robot class <br>
 Implemented Character class receiced MovingObject as an ancestor class <br>
+added hp and exp to Character , deleted hp and exp from Sherlock and Watson <br>
+Implemented MagicBook, EnergyDrink and FirstAid <br>

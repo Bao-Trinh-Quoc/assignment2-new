@@ -133,15 +133,22 @@ public:
     virtual string str() const = 0;
     // additional methods
     string getName() const {    return name;   }
-    virtual int getExp() const {return -1;}
+    virtual int getExp() const {    return -1;  }
 };
 
 class Character : public MovingObject
 {
     friend class TestStudyInPink;
+protected:
+    int hp;
+    int exp;
 public:
     Character(int index, const Position & pos, Map * map, const string & name)
         : MovingObject(index, pos, map, name) {};
+    // additional methods
+    void setExp(int exp) {    this->exp = exp;  }
+    void setHp(int hp)  {    this->hp = hp;    }
+    int getHp() const {    return hp;   }
 };
 
 class Sherlock : public Character {
@@ -149,8 +156,6 @@ class Sherlock : public Character {
 private:
     // TODO
     string moving_rule;
-    int hp;
-    int exp;
 
 public:
     Sherlock(int index, const string & moving_rule, const Position & init_pos, Map * map, int init_hp, int init_exp);
@@ -166,8 +171,6 @@ class Watson : public Character {
 private:
     // TODO
     string moving_rule;
-    int hp;
-    int exp;
 
 public:
     Watson(int index, const string & moving_rule, const Position & init_pos, Map * map, int init_hp, int init_exp);
@@ -309,7 +312,56 @@ public:
 
 
 // BaseItem, BaseBag,...
+class BaseItem
+{
+    friend class TestStudyInPink;
+public:
+    virtual bool canUse(Character * obj, Robot * robot) = 0;
+    virtual void use(Character * obj, Robot * robot) = 0;
+};
 
+class MagicBook : public BaseItem
+{
+    friend class TestStudyInPInk;
+public:
+    bool canUse(Character * obj, Robot * robot);
+    void use(Character * obj, Robot * robot);
+};
+
+class EnergyDrink : public BaseItem
+{
+    friend class TestStudyInPink;
+public:
+    bool canUse(Character * obj, Robot * robot);
+    void use(Character * obj, Robot * robot);
+};
+
+class FirstAid : public BaseItem
+{
+    friend class TestStudyInPink;
+public:
+    bool canUse(Character * obj, Robot * robot);
+    void use(Character * obj, Robot * robot);
+};
+
+class ExcemptionCard : public BaseItem
+{
+    friend class TestStudyInPink;
+public:
+    bool canUse(Character * obj, Robot * robot);
+    void use(Character * obj, Robot * robot);
+};
+
+class PassingCard : public BaseItem 
+{
+    friend class TestStudyInPink;
+private:
+    string challenge;
+public:
+    PassingCard(const string & challenge);
+    bool canUse(Character * obj, Robot * robot);
+    void use(Character * obj, Robot * robot);
+};
 
 class StudyPinkProgram {
     friend class TestStudyInPink;

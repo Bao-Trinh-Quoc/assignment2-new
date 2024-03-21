@@ -819,6 +819,44 @@ string RobotSW::str() const
     ss << "RobotSW[pos=" << pos.str() << ";type=SW;dist=" << getDistance(sherlock, watson) << "]";
     return ss.str();
 }
+
+/*================ Implement of MagicBook class ========================*/
+bool MagicBook::canUse(Character * obj, Robot * robot)
+{
+    return obj->getExp() <= 350;
+}
+void MagicBook::use(Character * obj, Robot * robot)
+{
+    if (canUse(obj, robot))
+    {
+        obj->setExp(obj->getExp() * 1.25);
+    }
+}
+/*================ Implement of EnergyDrink class ========================*/
+bool EnergyDrink::canUse(Character * obj, Robot * robot)
+{
+    return obj->getHp() <= 100;
+}
+void EnergyDrink::use(Character * obj, Robot * robot)
+{
+    if (canUse(obj, robot))
+    {
+        obj->setHp(obj->getHp() * 1.20);
+    }
+}
+/*================ Implement of FirstAid class ========================*/
+bool FirstAid::canUse(Character * obj, Robot * robot)
+{
+    return (obj->getHp() <= 100) || (obj->getExp() <= 350);
+}
+void FirstAid::use(Character * obj, Robot * robot)
+{
+    if (canUse(obj, robot))
+    {
+        obj->setHp(obj->getHp() * 1.50);
+    }
+}
+
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
 ////////////////////////////////////////////////
