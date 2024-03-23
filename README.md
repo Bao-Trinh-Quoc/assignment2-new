@@ -60,3 +60,6 @@ Simplified Robot class <br>
 Implemented Character class receiced MovingObject as an ancestor class <br>
 added hp and exp to Character , deleted hp and exp from Sherlock and Watson <br>
 Implemented MagicBook, EnergyDrink and FirstAid <br>
+# 23/03/2024
+Implemented ExcemptionCard class --- not done yet tho <br>
+Implemented PassingCard class --- not done yet tho <br>

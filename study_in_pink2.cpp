@@ -856,7 +856,35 @@ void FirstAid::use(Character * obj, Robot * robot)
         obj->setHp(obj->getHp() * 1.50);
     }
 }
-
+/*================ Implement of ExcemptionCard class ========================*/
+bool ExcemptionCard::canUse(Character * obj, Robot * robot)
+{
+    return ((obj->getName() == "Sherlock") && (obj->getHp() % 2 != 0));
+}
+void ExcemptionCard::use(Character * obj, Robot * robot)
+{
+    /*
+    Immunity Card helps the character to be immune to hp, exp when not overcoming challenges at a destination.
+    will implement later
+    */
+}
+/*================ Implement of PassingCard class ========================*/
+bool PassingCard::canUse(Character * obj, Robot * robot)
+{
+    return ((obj->getName() == "Watson") && (obj->getHp() % 2 == 0));
+}
+void PassingCard::use(Character * obj, Robot * robot)
+{
+    /* 
+    When using the PassingCard to perform a challenge, the character does not need to perform the challenge at a destination location
+    The tag has an attribute challenge (type string) which is the name of a challenge (for example type RobotS is a
+    tag to pass the challenge posed by RobotS without doing it
+    If the tag’s type is all the tag can be used for any type regardless of the challenge encountered.
+    Otherwise, it is necessary to check whether the card type  matches the type of challenging action the character encounters
+    if the card type does not match:
+        *the character’s exp will be reduced by 50 EXP even though the effect still be performed 
+    */
+}
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
 ////////////////////////////////////////////////

@@ -358,7 +358,7 @@ class PassingCard : public BaseItem
 private:
     string challenge;
 public:
-    PassingCard(const string & challenge);
+    PassingCard(const string & challenge) : challenge(challenge) {};
     bool canUse(Character * obj, Robot * robot);
     void use(Character * obj, Robot * robot);
 };
