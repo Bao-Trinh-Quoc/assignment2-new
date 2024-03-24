@@ -251,7 +251,7 @@ public:
     BaseItem * item;
     Criminal * criminal;
 public:
-    Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type);
+    Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type, BaseItem * item = nullptr);
 };
 
 class RobotC : public Robot
@@ -316,6 +316,8 @@ class BaseItem
 {
     friend class TestStudyInPink;
 public:
+    BaseItem * next = nullptr;
+public:
     virtual bool canUse(Character * obj, Robot * robot) = 0;
     virtual void use(Character * obj, Robot * robot) = 0;
 };
@@ -361,6 +363,51 @@ public:
     PassingCard(const string & challenge) : challenge(challenge) {};
     bool canUse(Character * obj, Robot * robot);
     void use(Character * obj, Robot * robot);
+};
+
+class BaseBag
+{
+    friend class TestStudyInPink;
+protected:
+    Character * obj;
+    BaseItem * head;
+public:
+    BaseBag(Character * obj) : obj(obj) {   head = nullptr; };
+    virtual ~BaseBag() {};
+    // return true if insert successfully
+    virtual bool insert(BaseItem * item);
+    // return the item as described above, if not found, return NULL
+    virtual BaseItem * get();
+    // return the item as described above, if not found, return NULL
+    virtual BaseItem * get(ItemType itemType);
+    // Bag[count=<c>;<list_items>]
+    virtual string str() const;
+};
+
+class SherlockBag : public BaseBag
+{
+    friend class TestStudyInPink;
+private:
+    int maxSize, currentSize;
+public:
+    SherlockBag(Sherlock * sherlock);
+    bool insert(BaseItem * item);
+    BaseItem * get();
+    BaseItem * get(ItemType itemType);
+    string str() const; 
+};
+
+class WatsonBag : public BaseBag
+{
+    friend class TestStudyInPink;
+private:
+    int maxSize, currentSize;
+public:
+    WatsonBag(Watson * watson);
+    bool insert(BaseItem * item);
+    BaseItem * get();
+    BaseItem * get(ItemType itemType);
+    string str() const;  
 };
 
 class StudyPinkProgram {

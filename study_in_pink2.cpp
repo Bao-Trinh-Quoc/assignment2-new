@@ -591,12 +591,9 @@ string Configuration::str() const
 }
 
 /*================ Implement of Robot class ========================*/
-Robot::Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type)
-        : MovingObject(index, init_pos, map, "Robot"), robot_type(robot_type), criminal(Criminal)
-{
-    // for later use 
-    item = nullptr;
-}
+Robot::Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type, BaseItem * item)
+        : MovingObject(index, init_pos, map, "Robot"), robot_type(robot_type), criminal(Criminal), item(item)
+{}
 
 /*================ Implement of RobotC class ========================*/
 RobotC::RobotC(int index, const Position & init_pos, Map * map, Criminal * Criminal,  RobotType robot_type)
@@ -884,6 +881,40 @@ void PassingCard::use(Character * obj, Robot * robot)
     if the card type does not match:
         *the character’s exp will be reduced by 50 EXP even though the effect still be performed 
     */
+}
+/*================ Implement of sherlockBag class ========================*/
+SherlockBag::SherlockBag(Sherlock * sherlock) : BaseBag(sherlock) 
+{
+    maxSize = 13;
+    currentSize = 0;
+}
+/*
+    Add the item to the beginning of the list
+*/
+bool SherlockBag::insert(BaseItem * item)
+{
+    if (head == nullptr)
+    {
+        head = item;
+        return true;
+    }
+    else 
+    {
+        item->next = head;
+        head = item;
+        return true;
+    }
+    return false;
+}
+/*
+    Find the item in the bag that can be used and is closest
+    to the top of the bag. This item will be flipped
+    with the first item in the list and then
+     removed from the list.
+*/
+BaseItem * SherlockBag::get()
+{
+    return nullptr;
 }
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER

@@ -63,3 +63,6 @@ Implemented MagicBook, EnergyDrink and FirstAid <br>
 # 23/03/2024
 Implemented ExcemptionCard class --- not done yet tho <br>
 Implemented PassingCard class --- not done yet tho <br>
+# 24/03/2024
+added item attributes in Robot class <br>
+Initialized BaseBag, SherlockBag, WatsonBag --- not done yet tho <br>
