@@ -317,6 +317,7 @@ class BaseItem
     friend class TestStudyInPink;
 public:
     BaseItem * next = nullptr;
+    ItemType itemType;
 public:
     virtual bool canUse(Character * obj, Robot * robot) = 0;
     virtual void use(Character * obj, Robot * robot) = 0;
@@ -372,8 +373,8 @@ protected:
     Character * obj;
     BaseItem * head;
 public:
-    BaseBag(Character * obj) : obj(obj) {   head = nullptr; };
-    virtual ~BaseBag() {};
+    BaseBag(Character * obj) : obj(obj) { head = nullptr; }
+    virtual ~BaseBag() {}
     // return true if insert successfully
     virtual bool insert(BaseItem * item);
     // return the item as described above, if not found, return NULL

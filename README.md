@@ -66,3 +66,5 @@ Implemented PassingCard class --- not done yet tho <br>
 # 24/03/2024
 added item attributes in Robot class <br>
 Initialized BaseBag, SherlockBag, WatsonBag --- not done yet tho <br>
+# 25/03/2024
+Implemeted SherlockBag and WatsonBag <br>

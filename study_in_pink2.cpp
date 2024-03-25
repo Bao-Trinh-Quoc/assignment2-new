@@ -883,8 +883,9 @@ void PassingCard::use(Character * obj, Robot * robot)
     */
 }
 /*================ Implement of sherlockBag class ========================*/
-SherlockBag::SherlockBag(Sherlock * sherlock) : BaseBag(sherlock) 
+SherlockBag::SherlockBag(Sherlock * sherlock) : BaseBag(sherlock)
 {
+    head = nullptr;
     maxSize = 13;
     currentSize = 0;
 }
@@ -896,25 +897,268 @@ bool SherlockBag::insert(BaseItem * item)
     if (head == nullptr)
     {
         head = item;
+        currentSize++;
         return true;
     }
     else 
     {
         item->next = head;
         head = item;
+        currentSize++;
         return true;
     }
     return false;
 }
 /*
     Find the item in the bag that can be used and is closest
-    to the top of the bag. This item will be flipped
+    to the top of the bag. This item will be swapped
     with the first item in the list and then
-     removed from the list.
+    removed from the list.
 */
 BaseItem * SherlockBag::get()
 {
+    BaseItem * temp = head;
+    BaseItem * prev = nullptr;
+    while (temp != nullptr)
+    {
+        if (temp->canUse(obj, nullptr))
+        {
+            // if the item is not the first item in the list
+            if (prev != nullptr)
+            {
+                // swap temp with head
+                prev->next = head;
+                head->next = temp->next;
+                temp->next = prev;
+                head = temp;
+            }
+            // Remove the head of the list
+            head = head->next;
+            currentSize--;
+            return temp;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+
     return nullptr;
+}
+/*
+    If in the inventory there is an item of the
+    type to be used, the character can use this item by reversing its position with first item
+    (if it is not the first item) and remove it from the list. If there are multiple items, the
+    item closest to the top of the bag will be done as above.
+*/
+BaseItem * SherlockBag::get(ItemType itemType)
+{
+    BaseItem * temp = head;
+    BaseItem * prev = nullptr;
+    while (temp != nullptr)
+    {
+        if ((temp->itemType == itemType) && (temp->canUse(obj, nullptr)))
+        {
+            // if the item is not the first item in the list
+            if (prev != nullptr)
+            {
+                // swap temp with head
+                prev->next = head;
+                head->next = temp->next;
+                temp->next = prev;
+                head = temp;
+            }
+            // Remove the head of the list
+            head = head->next;
+            currentSize--;
+            return temp;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+
+    return nullptr;
+}
+/*
+    Bag[count=<c>;<list_items>]
+    <c>: is the current number of items that the inventory has.
+    <list_items>: is a string representing the items from beginning to end of a linked list
+    each item is represented by the item’s type name, the items are separated by a comma
+    The type names of the items are the same as the class names described above
+*/
+string SherlockBag::str() const 
+{
+    stringstream ss;
+    ss << "Bag[count=" << currentSize << ";";
+    BaseItem * temp = head;
+    while (temp != nullptr)
+    {
+        if (temp->itemType == MAGIC_BOOK)
+        {
+            ss << "MagicBook";
+        }
+        else if (temp->itemType == ENERGY_DRINK)
+        {
+            ss << "EnergyDrink";
+        }
+        else if (temp->itemType == FIRST_AID)
+        {
+            ss << "FirstAid";
+        }
+        else if (temp->itemType == EXCEMPTION_CARD)
+        {
+            ss << "ExcemptionCard";
+        }
+        else if (temp->itemType == PASSING_CARD)
+        {
+            ss << "PassingCard";
+        }
+
+        if (temp->next != nullptr)
+        {
+            ss << ",";
+        }
+        temp = temp->next;
+    }
+    ss << "]";
+    return ss.str();
+}
+/*================ Implement of watsonBag class ========================*/
+WatsonBag::WatsonBag(Watson * watson) : BaseBag(watson)
+{
+    head = nullptr;
+    maxSize = 15;
+    currentSize = 0;
+}
+/*
+    Add the item to the beginning of the list
+*/
+bool WatsonBag::insert(BaseItem * item)
+{
+    if (head == nullptr)
+    {
+        head = item;
+        currentSize++;
+        return true;
+    }
+    else 
+    {
+        item->next = head;
+        head = item;
+        currentSize++;
+        return true;
+    }
+    return false;
+}
+/*
+    Find the item in the bag that can be used and is closest
+    to the top of the bag. This item will be swapped
+    with the first item in the list and then
+    removed from the list.
+*/
+BaseItem * WatsonBag::get()
+{
+    BaseItem * temp = head;
+    BaseItem * prev = nullptr;
+    while (temp != nullptr)
+    {
+        if (temp->canUse(obj, nullptr))
+        {
+            // if the item is not the first item in the list
+            if (prev != nullptr)
+            {
+                // swap temp with head
+                prev->next = head;
+                head->next = temp->next;
+                temp->next = prev;
+                head = temp;
+            }
+            // Remove the head of the list
+            head = head->next;
+            currentSize--;
+            return temp;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+
+    return nullptr;
+}
+/*
+    If in the inventory there is an item of the
+    type to be used, the character can use this item by reversing its position with first item
+    (if it is not the first item) and remove it from the list. If there are multiple items, the
+    item closest to the top of the bag will be done as above.
+*/
+BaseItem * WatsonBag::get(ItemType itemType)
+{
+    BaseItem * temp = head;
+    BaseItem * prev = nullptr;
+    while (temp != nullptr)
+    {
+        if ((temp->itemType == itemType) && (temp->canUse(obj, nullptr)))
+        {
+            // if the item is not the first item in the list
+            if (prev != nullptr)
+            {
+                // swap temp with head
+                prev->next = head;
+                head->next = temp->next;
+                temp->next = prev;
+                head = temp;
+            }
+            // Remove the head of the list
+            head = head->next;
+            currentSize--;
+            return temp;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+
+    return nullptr;
+}
+/*
+    Bag[count=<c>;<list_items>]
+    <c>: is the current number of items that the inventory has.
+    <list_items>: is a string representing the items from beginning to end of a linked list
+    each item is represented by the item’s type name, the items are separated by a comma
+    The type names of the items are the same as the class names described above
+*/
+string SherlockBag::str() const 
+{
+    stringstream ss;
+    ss << "Bag[count=" << currentSize << ";";
+    BaseItem * temp = head;
+    while (temp != nullptr)
+    {
+        if (temp->itemType == MAGIC_BOOK)
+        {
+            ss << "MagicBook";
+        }
+        else if (temp->itemType == ENERGY_DRINK)
+        {
+            ss << "EnergyDrink";
+        }
+        else if (temp->itemType == FIRST_AID)
+        {
+            ss << "FirstAid";
+        }
+        else if (temp->itemType == EXCEMPTION_CARD)
+        {
+            ss << "ExcemptionCard";
+        }
+        else if (temp->itemType == PASSING_CARD)
+        {
+            ss << "PassingCard";
+        }
+
+        if (temp->next != nullptr)
+        {
+            ss << ",";
+        }
+        temp = temp->next;
+    }
+    ss << "]";
+    return ss.str();
 }
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
