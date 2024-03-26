@@ -427,6 +427,7 @@ private:
 
 public:
     StudyPinkProgram(const string & config_file_path);
+    ~StudyPinkProgram();
 
     bool isStop() const;
 
@@ -466,7 +467,7 @@ public:
         printResult();
     }
 
-    ~StudyPinkProgram();
+    // ~StudyPinkProgram();
 };
 
 ////////////////////////////////////////////////

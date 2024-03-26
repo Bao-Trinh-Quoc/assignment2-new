@@ -68,3 +68,12 @@ added item attributes in Robot class <br>
 Initialized BaseBag, SherlockBag, WatsonBag --- not done yet tho <br>
 # 25/03/2024
 Implemeted SherlockBag and WatsonBag <br>
+# 26/03/2024
+Things haven't done yet: <br>
+* the process of creating robot when Crimininal moved --- have to reread
+* some methods of ExcemptionCard and PassingCard  --- have to reread
+* the process of creating items on Robot --- have to reread
+* When Watson and Sherlock meet, they will exchange items --- have to reread
+<br>
+Implemeted StudyInPink class --- almost done <br>
+

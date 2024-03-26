@@ -540,7 +540,7 @@ Configuration::~Configuration()
 /*
     Format of this string:
     Configuration[<attribute_name1>=<attribute_value1>;...] --- needed to be updated
-     Configuration[
+    Configuration[
     MAP_NUM_ROWS=10
     MAP_NUM_COLS=10
     MAX_NUM_MOVING_OBJECTS=10
@@ -1159,6 +1159,47 @@ string SherlockBag::str() const
     }
     ss << "]";
     return ss.str();
+}
+/*================ Implement of StudyPinkProgram class ========================*/
+/*
+    Constructor receives 1 parameter which is the path to the configuration file for
+    the program. The constructor needs to initialize the necessary information for the
+    class. As for arr_mv_objs, after initialization, criminal, sherlock, watson are added
+    sequentially using the add method
+*/
+StudyPinkProgram::StudyPinkProgram(const string & config_file_path)
+{
+    config = new Configuration(config_file_path);
+    map = new Map(config->map_num_rows, config->map_num_cols, config->num_walls, config->arr_walls, config->num_fake_walls, config->arr_fake_walls);
+    arr_mv_objs = new ArrayMovingObject(config->map_num_moving_objects);
+    sherlock = new Sherlock(1, config->sherlock_moving_rule, config->sherlock_init_pos, map, config->sherlock_init_hp, config->sherlock_init_exp);
+    watson = new Watson(2, config->watson_moving_rule, config->watson_init_pos, map, config->watson_init_hp, config->watson_init_exp);
+    criminal = new Criminal(0, config->criminal_init_pos, map, sherlock, watson);
+    arr_mv_objs->add(criminal);
+    arr_mv_objs->add(sherlock);
+    arr_mv_objs->add(watson);
+}
+/*
+    Destructor needs to delete the map, arr_mv_objs, criminal, sherlock, watson
+*/
+StudyPinkProgram::~StudyPinkProgram()
+{
+    delete map;
+    delete arr_mv_objs;
+    delete criminal;
+    delete sherlock;
+    delete watson;
+}
+/*
+    The isStop method returns true if the program stops, otherwise returns false.
+    The program stops when one of the following conditions occurs: Sherlock’s hp is 0;
+    Watson’s hp is 0; Sherlock catches the criminal; Watson caught the criminal.
+*/
+bool StudyPinkProgram::isStop() const
+{
+    return (sherlock->getHp() == 0) || (watson->getHp() == 0) 
+            || (sherlock->getCurrentPosition() == criminal->getCurrentPosition())
+            || (watson->getCurrentPosition() == criminal->getCurrentPosition());
 }
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
