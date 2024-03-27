@@ -591,9 +591,75 @@ string Configuration::str() const
 }
 
 /*================ Implement of Robot class ========================*/
-Robot::Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type, BaseItem * item)
-        : MovingObject(index, init_pos, map, "Robot"), robot_type(robot_type), criminal(Criminal), item(item)
-{}
+Robot::Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type)
+        : MovingObject(index, init_pos, map, "Robot"), robot_type(robot_type), criminal(Criminal)
+{
+	/*
+	These items are contained within the robots. The conditions created are as follows:
+ 	Call the location where the robot is created with coordinates (i,j) where i is the row index,
+ 	j is the column index.
+	With p = i∗j. Call s the cardinal number of p . We define the cardinal number of a number
+ 	as the sum value of the digits, until the sum value is a 1-digit number.
+	*/
+    int p = init_pos.getRow() * init_pos.getCol();
+    int s = cardinalNum(p);
+    if (s >= 0 && s <= 1)
+    {
+        // create MagicBook
+        item = new MagicBook();
+    }
+    else if  (s >= 2 && s <= 3)
+    {
+        // create EnergyDrink
+        item = new EnergyDrink();
+    }
+    else if (s >= 4 && s <= 5)
+    {
+        // create FirstAid
+        item = new FirstAid();
+    }
+    else if (s >= 6 && s <= 7)
+    {
+        // create ExcemptionCard
+        item = new ExcemptionCard();
+    }
+    else if (s >= 8 && s <= 9)
+    {
+        // create PassingCard
+        int t = (init_pos.getRow() * 11 + init_pos.getCol()) % 4;
+        string challenge = "";
+        if (t == 0)
+        {
+            challenge = "RobotS";
+        }
+        else if (t == 1)
+        {
+            challenge = "RobotC";
+        }
+        else if (t == 2)
+        {
+            challenge = "RobotSW";
+        }
+        else if (t == 3)
+        {
+            challenge = "all";
+        }
+        item = new PassingCard(challenge);
+    }
+}
+
+int Robot::cardinalNum(int num)
+{
+    while (num > 9) {
+        int sum = 0;
+        while (num > 0) {
+            sum += num % 10;
+            num /= 10;
+        }
+        num = sum;
+    }
+    return num;
+}
 
 /*================ Implement of RobotC class ========================*/
 RobotC::RobotC(int index, const Position & init_pos, Map * map, Criminal * Criminal,  RobotType robot_type)
@@ -651,11 +717,15 @@ RobotS::RobotS(int index, const Position & init_pos, Map * map, Criminal * Crimi
 */
 Position RobotS::getNextPosition()
 {
-    // U R D L 
+    /*
+        Move to the next location 1 unit away from the original and closest to
+        Sherlock’s next location (Mathantann dstance)
+    */
+    // U R D : 
     Position directions[] = {Position(-1, 0), Position(0, 1), Position(1, 0), Position(0, -1)};
     int nearestDistance = INT_MAX;
     Position next_pos = Position::npos;
-
+    // Loop through all 4 directions
     for (int i = 0; i < 4; i++)
     {
         // Calculate new RobotS position
@@ -713,7 +783,7 @@ Position RobotW::getNextPosition()
     Position directions[] = {Position(-1, 0), Position(0, 1), Position(1, 0), Position(0, -1)};
     int nearestDistance = INT_MAX;
     Position next_pos = Position::npos;
-
+    // Loop through all 4 directions
     for (int i = 0; i < 4; i++)
     {
         // Calculate new RobotW position
@@ -766,12 +836,17 @@ RobotSW::RobotSW(int index, const Position & init_pos, Map * map, Criminal * Cri
 */
 Position RobotSW::getNextPosition()
 {
-    // U R D L 
-    Position directions[] = {Position(-2, 0), Position(0, 2), Position(2, 0), Position(0, -2)};
+    /*
+     Move to the next location that is 2 units away from the original and has
+    the closest total distance to both Sherlock and Watson. (manhattan distance)
+    */
+    // U2 RU1 R2 RD1 D2 LD1 L2 LU1
+    Position directions[] = {Position(-2, 0), Position(-1, 1), Position(0, 2), Position(1, 1),
+                             Position(2, 0), Position(1, -1), Position(0, -2), Position(-1, -1)};
     int nearestDistance = INT_MAX;
     Position next_pos = Position::npos;
-
-    for (int i = 0; i < 4; i++)
+    // Loop through all 8 directions
+    for (int i = 0; i < 8; i++)
     {
         // Calculate new RobotSW position
         int xdir = pos.getRow() + directions[i].getRow();
@@ -864,6 +939,7 @@ void ExcemptionCard::use(Character * obj, Robot * robot)
     Immunity Card helps the character to be immune to hp, exp when not overcoming challenges at a destination.
     will implement later
     */
+   return;
 }
 /*================ Implement of PassingCard class ========================*/
 bool PassingCard::canUse(Character * obj, Robot * robot)
@@ -881,6 +957,15 @@ void PassingCard::use(Character * obj, Robot * robot)
     if the card type does not match:
         *the character’s exp will be reduced by 50 EXP even though the effect still be performed 
     */
+   if (challenge == "all" || challenge == robot->getName())
+   {
+		return;
+   }
+   else
+   {
+		obj->setExp(obj->getExp() - 50);
+		return;
+   }
 }
 /*================ Implement of sherlockBag class ========================*/
 SherlockBag::SherlockBag(Sherlock * sherlock) : BaseBag(sherlock)
@@ -888,6 +973,16 @@ SherlockBag::SherlockBag(Sherlock * sherlock) : BaseBag(sherlock)
     head = nullptr;
     maxSize = 13;
     currentSize = 0;
+}
+SherlockBag::~SherlockBag()
+{
+    BaseItem * temp = head;
+    while (temp != nullptr)
+    {
+        BaseItem * next = temp->next;
+        delete temp;
+        temp = next;
+    }
 }
 /*
     Add the item to the beginning of the list
@@ -1028,6 +1123,16 @@ WatsonBag::WatsonBag(Watson * watson) : BaseBag(watson)
     maxSize = 15;
     currentSize = 0;
 }
+WatsonBag::~WatsonBag()
+{
+    BaseItem * temp = head;
+    while (temp != nullptr)
+    {
+        BaseItem * next = temp->next;
+        delete temp;
+        temp = next;
+    }
+}
 /*
     Add the item to the beginning of the list
 */
@@ -1123,7 +1228,7 @@ BaseItem * WatsonBag::get(ItemType itemType)
     each item is represented by the item’s type name, the items are separated by a comma
     The type names of the items are the same as the class names described above
 */
-string SherlockBag::str() const 
+string WatsonBag::str() const 
 {
     stringstream ss;
     ss << "Bag[count=" << currentSize << ";";
@@ -1201,6 +1306,27 @@ bool StudyPinkProgram::isStop() const
             || (sherlock->getCurrentPosition() == criminal->getCurrentPosition())
             || (watson->getCurrentPosition() == criminal->getCurrentPosition());
 }
+void StudyPinkProgram::run(bool verbose)
+{
+    int criminalMoves = 0;
+    // Note: This is a sample code. You can change the implementation as you like.
+    // TODO
+    for (int istep = 0; istep < config->num_steps; ++istep) {
+        for (int i = 0; i < arr_mv_objs->size(); ++i) {
+            arr_mv_objs->get(i)->move();
+
+            if (isStop()) {
+                printStep(istep);
+                break;
+            }
+            if (verbose) {
+                printStep(istep);
+            }
+        }
+    }
+    printResult();
+}
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
 ////////////////////////////////////////////////
+

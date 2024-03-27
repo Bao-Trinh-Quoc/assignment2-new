@@ -73,7 +73,16 @@ Things haven't done yet: <br>
 * the process of creating robot when Crimininal moved --- have to reread
 * some methods of ExcemptionCard and PassingCard  --- have to reread
 * the process of creating items on Robot --- have to reread
-* When Watson and Sherlock meet, they will exchange items --- have to reread
-<br>
+* When Watson and Sherlock meet, they will exchange items --- have to reread <br>
 Implemeted StudyInPink class --- almost done <br>
+# 27/03/2024
+done the process of creating robot when Criminal moved <br>
+Intentionlly left void use of ExemptionCard blank because when the character use it, they just skip the effect will be applied <br>
+Implemented PassingCard <br>
+Implemented the process of creating items on Robot <br>
+**Needed to read robotSW moved again (matthatan distance)** -- done <br>
+**The same for robotS (mathattan distance)** -- done <br>
 
+added destructor for watson and sherlock ' bag <br>
+changed methods in Bag to pure virtual <br>
+problems about run method <br>

@@ -251,7 +251,10 @@ public:
     BaseItem * item;
     Criminal * criminal;
 public:
-    Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type, BaseItem * item = nullptr);
+    Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type);
+private:
+    // helper methods
+    int cardinalNum(int num);
 };
 
 class RobotC : public Robot
@@ -376,13 +379,13 @@ public:
     BaseBag(Character * obj) : obj(obj) { head = nullptr; }
     virtual ~BaseBag() {}
     // return true if insert successfully
-    virtual bool insert(BaseItem * item);
+    virtual bool insert(BaseItem * item) = 0;
     // return the item as described above, if not found, return NULL
-    virtual BaseItem * get();
+    virtual BaseItem * get() = 0;
     // return the item as described above, if not found, return NULL
-    virtual BaseItem * get(ItemType itemType);
+    virtual BaseItem * get(ItemType itemType) = 0;
     // Bag[count=<c>;<list_items>]
-    virtual string str() const;
+    virtual string str() const = 0;
 };
 
 class SherlockBag : public BaseBag
@@ -392,6 +395,7 @@ private:
     int maxSize, currentSize;
 public:
     SherlockBag(Sherlock * sherlock);
+    ~SherlockBag();
     bool insert(BaseItem * item);
     BaseItem * get();
     BaseItem * get(ItemType itemType);
@@ -405,6 +409,7 @@ private:
     int maxSize, currentSize;
 public:
     WatsonBag(Watson * watson);
+    ~WatsonBag();
     bool insert(BaseItem * item);
     BaseItem * get();
     BaseItem * get(ItemType itemType);
@@ -421,9 +426,13 @@ private:
     Watson * watson;
     Criminal * criminal;
     
+    SherlockBag * sherlock_bag = new SherlockBag(sherlock);
+    WatsonBag * watson_bag = new WatsonBag(watson);
+
     Map * map;
     ArrayMovingObject * arr_mv_objs;
 
+    Robot * newRobot = nullptr;
 
 public:
     StudyPinkProgram(const string & config_file_path);
@@ -449,23 +458,7 @@ public:
             << sherlock->str() << "--|--" << watson->str() << "--|--" << criminal->str() << endl;
     }
 
-    void run(bool verbose) {
-        // Note: This is a sample code. You can change the implementation as you like.
-        // TODO
-        for (int istep = 0; istep < config->num_steps; ++istep) {
-            for (int i = 0; i < arr_mv_objs->size(); ++i) {
-                arr_mv_objs->get(i)->move();
-                if (isStop()) {
-                    printStep(istep);
-                    break;
-                }
-                if (verbose) {
-                    printStep(istep);
-                }
-            }
-        }
-        printResult();
-    }
+    void run(bool verbose);
 
     // ~StudyPinkProgram();
 };
