@@ -97,3 +97,8 @@ almost done this thing! <br>
 changed insert method in SherlockBag and WatsonBag <br>
 added peak method for both WatsonBag and SherlockBag <br>
 done! <br>
+
+update destructor arr_mv_objs <br>
+
+weird thing in sa_tc_01 --- double deletion problem <br>
+bugs in sa_tc_02 --- segmentation fault <br>

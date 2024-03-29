@@ -222,22 +222,22 @@ class Configuration {
     friend class TestStudyInPink;
 private: 
     // TODO
-    int map_num_rows, map_num_cols;
-    int map_num_moving_objects;
-    int num_walls;  // Number of Wall objects
+    int map_num_rows = 0, map_num_cols = 0;
+    int map_num_moving_objects = 0;
+    int num_walls = 0;  // Number of Wall objects
     Position * arr_walls; 
-    int num_fake_walls;  // Number of FakeWall objects
+    int num_fake_walls = 0;  // Number of FakeWall objects
     Position * arr_fake_walls;
-    string sherlock_moving_rule;
+    string sherlock_moving_rule = "";
     Position sherlock_init_pos;
-    int sherlock_init_hp;
-    int sherlock_init_exp;
-    string watson_moving_rule;
-    int watson_init_hp;
-    int watson_init_exp;
+    int sherlock_init_hp = 0;
+    int sherlock_init_exp = 0;
+    string watson_moving_rule = "";
+    int watson_init_hp = 0;
+    int watson_init_exp = 0;
     Position watson_init_pos;
     Position criminal_init_pos;
-    int num_steps;
+    int num_steps = 0;
 public:
     Configuration(const string & filepath);
     ~Configuration();

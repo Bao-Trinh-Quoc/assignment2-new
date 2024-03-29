@@ -366,12 +366,17 @@ ArrayMovingObject::ArrayMovingObject(int capcity)
     arr_mv_objs = new MovingObject * [capcity];
 }
 ArrayMovingObject::~ArrayMovingObject()
-{
-    for (int i = 0; i < capacity; i++)
+{   // for now left empty
+    // for (int i = 0; i < count; i++)
+    // {
+    //     delete arr_mv_objs[i];
+    // }
+    // delete[] arr_mv_objs;
+    if (this->arr_mv_objs != nullptr) // Only delete the array if it has not been deleted
     {
-        delete arr_mv_objs[i];
+        delete[] this->arr_mv_objs;
+        this->arr_mv_objs = nullptr; // Set the array pointer to null after deleting
     }
-    delete[] arr_mv_objs;
 }
 bool ArrayMovingObject::add(MovingObject * mv_obj)
 {
@@ -448,15 +453,22 @@ Configuration::Configuration(const string & filepath)
         {
             int r, c;
             int i = 0;
-            istringstream ss(line);
+            string positions = line.substr(line.find('=') + 1); // Get the part of the string after the equals sign
+            istringstream ss(positions);
             string token;
             while (getline(ss, token, ';'))
             {
-                if (token.find("ARRAY_WALLS=") != string::npos)
-                {
-                    continue;
-                }
-                sscanf(token.c_str(), "(%d,%d)", &r, &c);
+                size_t start = token.find('(') + 1;
+                size_t end = token.find(',');
+                string r_str = token.substr(start, end - start); // Extract the string for r
+
+                start = end + 1;
+                end = token.find(')');
+                string c_str = token.substr(start, end - start); // Extract the string for c
+
+                int r = stoi(r_str); // Convert r_str to an int
+                int c = stoi(c_str); // Convert c_str to an int
+
                 arr_walls[i++] = Position(r, c);
             }
         }
@@ -469,15 +481,22 @@ Configuration::Configuration(const string & filepath)
         {
             int r, c;
             int i = 0;
-            istringstream ss(line);
+            string positions = line.substr(line.find('=') + 1); // Get the part of the string after the equals sign
+            istringstream ss(positions);
             string token;
             while (getline(ss, token, ';'))
             {
-                if (token.find("ARRAY_FAKE_WALLS=") != string::npos)
-                {
-                    continue;
-                }
-                sscanf(token.c_str(), "(%d,%d)", &r, &c);
+                size_t start = token.find('(') + 1;
+                size_t end = token.find(',');
+                string r_str = token.substr(start, end - start); // Extract the string for r
+
+                start = end + 1;
+                end = token.find(')');
+                string c_str = token.substr(start, end - start); // Extract the string for c
+
+                int r = stoi(r_str); // Convert r_str to an int
+                int c = stoi(c_str); // Convert c_str to an int
+
                 arr_fake_walls[i++] = Position(r, c);
             }
         }
@@ -536,6 +555,7 @@ Configuration::Configuration(const string & filepath)
 Configuration::~Configuration()
 {
     delete[] arr_walls;
+    delete[] arr_fake_walls;
 }
 /*
     Format of this string:
