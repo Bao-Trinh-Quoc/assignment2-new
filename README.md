@@ -94,3 +94,6 @@ changed Robot class <br>
 changed some calculation in items <br>
 needed to check process of using item <br>
 almost done this thing! <br>
+changed insert method in SherlockBag and WatsonBag <br>
+added peak method for both WatsonBag and SherlockBag <br>
+done! <br>

@@ -403,6 +403,8 @@ public:
     BaseItem * get();
     BaseItem * get(ItemType itemType);
     string str() const; 
+    // additional methods
+    BaseItem * peak(ItemType itemType);
 };
 
 class WatsonBag : public BaseBag
@@ -417,6 +419,8 @@ public:
     BaseItem * get();
     BaseItem * get(ItemType itemType);
     string str() const;  
+    // additional methods
+    BaseItem * peak(ItemType itemType);
 };
 
 class StudyPinkProgram {

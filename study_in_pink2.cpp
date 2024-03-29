@@ -995,7 +995,7 @@ bool SherlockBag::insert(BaseItem * item)
         currentSize++;
         return true;
     }
-    else 
+    else if (currentSize < maxSize)
     {
         item->next = head;
         head = item;
@@ -1116,6 +1116,20 @@ string SherlockBag::str() const
     ss << "]";
     return ss.str();
 }
+
+BaseItem * SherlockBag::peak(ItemType itemType)
+{
+    BaseItem * temp = head;
+    while (temp != nullptr)
+    {
+        if (temp->itemType == itemType)
+        {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return nullptr;
+}
 /*================ Implement of watsonBag class ========================*/
 WatsonBag::WatsonBag(Watson * watson) : BaseBag(watson)
 {
@@ -1144,7 +1158,7 @@ bool WatsonBag::insert(BaseItem * item)
         currentSize++;
         return true;
     }
-    else 
+    else if (currentSize < maxSize)
     {
         item->next = head;
         head = item;
@@ -1264,6 +1278,19 @@ string WatsonBag::str() const
     }
     ss << "]";
     return ss.str();
+}
+BaseItem * WatsonBag::peak(ItemType itemType)
+{
+    BaseItem * temp = head;
+    while (temp != nullptr)
+    {
+        if (temp->itemType == itemType)
+        {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return nullptr;
 }
 /*================ Implement of StudyPinkProgram class ========================*/
 /*
@@ -1388,6 +1415,19 @@ void StudyPinkProgram::sherlockEvents(int index)
                     sherlock->setExp(ceil(sherlock->getExp() * 0.90));
                 }
             }
+
+            if (sherlock_bag->peak(MAGIC_BOOK)->canUse(sherlock, nullptr) == true)
+            {
+                sherlock_bag->get(MAGIC_BOOK)->use(sherlock, nullptr);
+            }
+            if (sherlock_bag->peak(ENERGY_DRINK)->canUse(sherlock, nullptr) == true)
+            {
+                sherlock_bag->get(ENERGY_DRINK)->use(sherlock, nullptr);
+            }
+            if (sherlock_bag->peak(FIRST_AID)->canUse(sherlock, nullptr) == true)
+            {
+                sherlock_bag->get(FIRST_AID)->use(sherlock, nullptr);
+            }
         }
         else if (arr_mv_objs->get(index)->getName() == "RobotW" && sherlock->getCurrentPosition() == arr_mv_objs->get(index)->getCurrentPosition())
         {
@@ -1395,6 +1435,18 @@ void StudyPinkProgram::sherlockEvents(int index)
             if (robot) 
             {
                 sherlock_bag->insert(robot->item);
+            }
+            if (sherlock_bag->peak(MAGIC_BOOK)->canUse(sherlock, nullptr) == true)
+            {
+                sherlock_bag->get(MAGIC_BOOK)->use(sherlock, nullptr);
+            }
+            if (sherlock_bag->peak(ENERGY_DRINK)->canUse(sherlock, nullptr) == true)
+            {
+                sherlock_bag->get(ENERGY_DRINK)->use(sherlock, nullptr);
+            }
+            if (sherlock_bag->peak(FIRST_AID)->canUse(sherlock, nullptr) == true)
+            {
+                sherlock_bag->get(FIRST_AID)->use(sherlock, nullptr);
             }
         }
         else if (arr_mv_objs->get(index)->getName() == "RobotSW" && sherlock->getCurrentPosition() == arr_mv_objs->get(index)->getCurrentPosition())
@@ -1409,11 +1461,27 @@ void StudyPinkProgram::sherlockEvents(int index)
             }
             else
             {
-                if (sherlock_bag->get(EXCEMPTION_CARD)->canUse(sherlock, robot) == false)
+                if (sherlock_bag->peak(EXCEMPTION_CARD)->canUse(sherlock, robot) == false)
                 {
                     sherlock->setExp(ceil(sherlock->getExp() * 0.85));
                     sherlock->setHp(ceil(sherlock->getHp() * 0.85));
                 }
+                else 
+                {
+                    sherlock_bag->get(EXCEMPTION_CARD)->use(sherlock, robot);
+                }
+            }
+            if (sherlock_bag->peak(MAGIC_BOOK)->canUse(sherlock, nullptr) == true)
+            {
+                sherlock_bag->get(MAGIC_BOOK)->use(sherlock, nullptr);
+            }
+            if (sherlock_bag->peak(ENERGY_DRINK)->canUse(sherlock, nullptr) == true)
+            {
+                sherlock_bag->get(ENERGY_DRINK)->use(sherlock, nullptr);
+            }
+            if (sherlock_bag->peak(FIRST_AID)->canUse(sherlock, nullptr) == true)
+            {
+                sherlock_bag->get(FIRST_AID)->use(sherlock, nullptr);
             }
         }
         else if (arr_mv_objs->get(index)->getName() == "RobotC" && sherlock->getCurrentPosition() == arr_mv_objs->get(index)->getCurrentPosition())
@@ -1433,6 +1501,18 @@ void StudyPinkProgram::sherlockEvents(int index)
                 {
                     sherlock_bag->insert(robot->item);
                 }
+            }
+            if (sherlock_bag->peak(MAGIC_BOOK)->canUse(sherlock, nullptr) == true)
+            {
+                sherlock_bag->get(MAGIC_BOOK)->use(sherlock, nullptr);
+            }
+            if (sherlock_bag->peak(ENERGY_DRINK)->canUse(sherlock, nullptr) == true)
+            {
+                sherlock_bag->get(ENERGY_DRINK)->use(sherlock, nullptr);
+            }
+            if (sherlock_bag->peak(FIRST_AID)->canUse(sherlock, nullptr) == true)
+            {
+                sherlock_bag->get(FIRST_AID)->use(sherlock, nullptr);
             }
         }
         else if (arr_mv_objs->get(index)->getName() == "Watson" && sherlock->getCurrentPosition() == arr_mv_objs->get(index)->getCurrentPosition())
@@ -1465,7 +1545,18 @@ void StudyPinkProgram::watsonEvents(int index)
     */
     if (arr_mv_objs->get(index)->getName() == "RobotS" && arr_mv_objs->get(index)->getCurrentPosition() == watson->getCurrentPosition())
     {
-
+        if (watson_bag->peak(MAGIC_BOOK)->canUse(watson, nullptr) == true)
+        {
+            watson_bag->get(MAGIC_BOOK)->use(watson, nullptr);
+        }
+        if (watson_bag->peak(ENERGY_DRINK)->canUse(watson, nullptr) == true)
+        {
+            watson_bag->get(ENERGY_DRINK)->use(watson, nullptr);
+        }
+        if (watson_bag->peak(FIRST_AID)->canUse(watson, nullptr) == true)
+        {
+            watson_bag->get(FIRST_AID)->use(watson, nullptr);
+        }
     }
     else if (arr_mv_objs->get(index)->getName() == "RobotW" && arr_mv_objs->get(index)->getCurrentPosition() == watson->getCurrentPosition())
     {
@@ -1479,17 +1570,83 @@ void StudyPinkProgram::watsonEvents(int index)
         }
         else
         {
-            if (watson_bag->get(PASSING_CARD)->canUse(watson, robot) == false)
+            if (watson_bag->peak(PASSING_CARD)->canUse(watson, robot) == false)
             {
                 watson->setHp(ceil(watson->getHp() * 0.95));
             }
             else 
             {
-                
+                watson_bag->get(PASSING_CARD)->use(watson, robot);
             }
+            if (watson_bag->peak(MAGIC_BOOK)->canUse(watson, nullptr) == true)
+            {
+                watson_bag->get(MAGIC_BOOK)->use(watson, nullptr);
+            }
+            if (watson_bag->peak(ENERGY_DRINK)->canUse(watson, nullptr) == true)
+            {
+                watson_bag->get(ENERGY_DRINK)->use(watson, nullptr);
+            }
+            if (watson_bag->peak(FIRST_AID)->canUse(watson, nullptr) == true)
+            {
+                watson_bag->get(FIRST_AID)->use(watson, nullptr);
+            }  
         }
     }
-
+    else if (arr_mv_objs->get(index)->getName() == "RobotSW" && arr_mv_objs->get(index)->getCurrentPosition() == watson->getCurrentPosition())
+    {
+        Robot * robot = dynamic_cast<Robot*>(arr_mv_objs->get(index));
+        if (watson->getExp() > 600 && watson->getHp() > 165)
+        {
+            if (robot) 
+            {
+                watson_bag->insert(robot->item);
+            }
+        }
+        else
+        {
+            if (watson_bag->peak(PASSING_CARD)->canUse(watson, robot) == false)
+            {
+                watson->setExp(ceil(watson->getExp() * 0.85));
+                watson->setHp(ceil(watson->getHp() * 0.85));
+            }
+            else 
+            {
+                watson_bag->get(PASSING_CARD)->use(watson, robot);
+            }
+            if (watson_bag->peak(MAGIC_BOOK)->canUse(watson, nullptr) == true)
+            {
+                watson_bag->get(MAGIC_BOOK)->use(watson, nullptr);
+            }
+            if (watson_bag->peak(ENERGY_DRINK)->canUse(watson, nullptr) == true)
+            {
+                watson_bag->get(ENERGY_DRINK)->use(watson, nullptr);
+            }
+            if (watson_bag->peak(FIRST_AID)->canUse(watson, nullptr) == true)
+            {
+                watson_bag->get(FIRST_AID)->use(watson, nullptr);
+            }
+        }
+    }  
+    else if (arr_mv_objs->get(index)->getName() == "RobotC" && arr_mv_objs->get(index)->getCurrentPosition() == watson->getCurrentPosition())
+    {
+        Robot * robot = dynamic_cast<Robot*>(arr_mv_objs->get(index));
+        if (robot) 
+        {
+            watson_bag->insert(robot->item);
+        }
+        if (watson_bag->peak(MAGIC_BOOK)->canUse(watson, nullptr) == true)
+        {
+            watson_bag->get(MAGIC_BOOK)->use(watson, nullptr);
+        }
+        if (watson_bag->peak(ENERGY_DRINK)->canUse(watson, nullptr) == true)
+        {
+            watson_bag->get(ENERGY_DRINK)->use(watson, nullptr);
+        }
+        if (watson_bag->peak(FIRST_AID)->canUse(watson, nullptr) == true)
+        {
+            watson_bag->get(FIRST_AID)->use(watson, nullptr);
+        }
+    }   
 }
 
 
