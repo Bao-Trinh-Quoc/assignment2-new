@@ -102,3 +102,6 @@ update destructor arr_mv_objs <br>
 
 weird thing in sa_tc_01 --- double deletion problem <br>
 bugs in sa_tc_02 --- segmentation fault <br>
+needed to rewrite config --- for tomorrow tho, don't rust <br>
+
+expriment with gitignore <br>

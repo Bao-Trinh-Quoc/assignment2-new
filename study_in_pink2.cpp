@@ -432,22 +432,21 @@ Configuration::Configuration(const string & filepath)
     char buffer[256];   // temp buffer
     while(getline(file, line))
     {
-        if (line.find("MAP_NUM_ROWS=") != string::npos)
-        {
-            sscanf(line.c_str(), "MAP_NUM_ROWS=%d", &map_num_rows);
-        }
-        else if (line.find("MAP_NUM_COLS=") != string::npos)
-        {
-            sscanf(line.c_str(), "MAP_NUM_COLS=%d", &map_num_cols);
-        }
-        else if (line.find("MAX_NUM_MOVING_OBJECTS=") != string::npos)
-        {
-            sscanf(line.c_str(), "MAX_NUM_MOVING_OBJECTS=%d", &map_num_moving_objects);
-        }
-        else if (line.find("NUM_WALLS=") != string::npos)
-        {
-            sscanf(line.c_str(), "NUM_WALLS=%d", &num_walls);
-            arr_walls = new Position[num_walls];
+        istringstream iss(line);
+        string key;
+        string value;
+
+        if (std::getline(iss, key, '=') && std::getline(iss, value)) {
+            if (key == "MAP_NUM_ROWS") {
+                map_num_rows = std::stoi(value);
+            } else if (key == "MAP_NUM_COLS") {
+                map_num_cols = std::stoi(value);
+            } else if (key == "MAX_NUM_MOVING_OBJECTS") {
+                map_num_moving_objects = std::stoi(value);
+            } else if (key == "NUM_WALLS") {
+                num_walls = std::stoi(value);
+                arr_walls = new Position[num_walls];
+            }
         }
         else if (line.find("ARRAY_WALLS=") != string::npos)
         {
