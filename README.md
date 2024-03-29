@@ -97,11 +97,11 @@ almost done this thing! <br>
 changed insert method in SherlockBag and WatsonBag <br>
 added peak method for both WatsonBag and SherlockBag <br>
 done! <br>
-
 update destructor arr_mv_objs <br>
-
 weird thing in sa_tc_01 --- double deletion problem <br>
 bugs in sa_tc_02 --- segmentation fault <br>
 needed to rewrite config --- for tomorrow tho, don't rust <br>
-
 expriment with gitignore <br>
+updated confiugration <br>
+yayyay <br>
+still need to update it regularly tho <br>

@@ -417,7 +417,21 @@ string ArrayMovingObject::str() const
 /*================ Implement of Configuration class ========================*/
 /* 
     The file consists of lines, each line can be one of the following formats. Note that the order of lines may vary.
-    ...
+    1. MAP_NUM_ROWS=<nr>
+    2. MAP_NUM_COLS=<nc>
+    3. MAX_NUM_MOVING_OBJECTS=<mnmo>
+    4. ARRAY_WALLS=<aw>
+    5. ARRAY_FAKE_WALLS=<afw>
+    6. SHERLOCK_MOVING_RULE=<smr>
+    7. SHERLOCK_INIT_POS=<sip>
+    8. SHERLOCK_INIT_HP=<sih>
+    9. SHERLOCK_INIT_EXP=<exp>
+    10. WATSON_MOVING_RULE=<wmr>
+    11. WATSON_INIT_POS=<wip>
+    12. WATSON_INIT_HP=<wih>
+    13. WATSON_INIT_EXP=<wie>
+    14. CRIMINAL_INIT_POS=<cip>
+    15. NUM_STEPS=<ns>
 */
 Configuration::Configuration(const string & filepath)
 {
@@ -428,125 +442,111 @@ Configuration::Configuration(const string & filepath)
         return;
     }
     string line;
-    // why need buffer ? Readme !! vdry interesting bugs about sscanf that i don't know --- 16/03/2024
-    char buffer[256];   // temp buffer
     while(getline(file, line))
     {
-        istringstream iss(line);
-        string key;
-        string value;
-
-        if (std::getline(iss, key, '=') && std::getline(iss, value)) {
-            if (key == "MAP_NUM_ROWS") {
-                map_num_rows = std::stoi(value);
-            } else if (key == "MAP_NUM_COLS") {
-                map_num_cols = std::stoi(value);
-            } else if (key == "MAX_NUM_MOVING_OBJECTS") {
-                map_num_moving_objects = std::stoi(value);
-            } else if (key == "NUM_WALLS") {
-                num_walls = std::stoi(value);
-                arr_walls = new Position[num_walls];
-            }
-        }
-        else if (line.find("ARRAY_WALLS=") != string::npos)
+        // Extract the attribute name and value from the line
+        string attribute_name = line.substr(0, line.find('='));
+        string attribute_value = line.substr(line.find('=') + 1);
+        // Process the attribute
+        if (attribute_name == "MAP_NUM_ROWS")
         {
-            int r, c;
-            int i = 0;
-            string positions = line.substr(line.find('=') + 1); // Get the part of the string after the equals sign
-            istringstream ss(positions);
-            string token;
-            while (getline(ss, token, ';'))
+            map_num_rows = stoi(attribute_value);
+        }
+        else if (attribute_name == "MAP_NUM_COLS")
+        {
+            map_num_cols = stoi(attribute_value);
+        }
+        else if (attribute_name == "MAX_NUM_MOVING_OBJECTS")
+        {
+            map_num_moving_objects = stoi(attribute_value);
+        }
+        else if (attribute_name == "ARRAY_WALLS")
+        {
+            stringstream ss(attribute_value.substr(1, attribute_value.size() - 2)); // Remove brackets
+            string item;
+            // Count the number of walls
+            while (getline(ss, item, ';')) // Split by semicolon
             {
-                size_t start = token.find('(') + 1;
-                size_t end = token.find(',');
-                string r_str = token.substr(start, end - start); // Extract the string for r
-
-                start = end + 1;
-                end = token.find(')');
-                string c_str = token.substr(start, end - start); // Extract the string for c
-
-                int r = stoi(r_str); // Convert r_str to an int
-                int c = stoi(c_str); // Convert c_str to an int
-
-                arr_walls[i++] = Position(r, c);
+               num_walls++;
+            }
+            // Allocate memory for the array of walls
+            arr_walls = new Position[num_walls];
+            // reset num_walls
+            num_walls = 0;
+            stringstream ss2(attribute_value.substr(1, attribute_value.size() - 2)); // Create a new stringstream
+            while (getline(ss2, item, ';')) // Split by semicolon
+            {
+                int row = stoi(item.substr(1, item.find(',')));
+                int col = stoi(item.substr(item.find(',') + 1, item.find(')')));
+                arr_walls[num_walls++] = Position(row, col);
             }
         }
-        else if (line.find("NUM_FAKE_WALLS=") != string::npos)
+        else if (attribute_name == "ARRAY_FAKE_WALLS")
         {
-            sscanf(line.c_str(), "NUM_FAKE_WALLS=%d", &num_fake_walls);
+            stringstream ss(attribute_value.substr(1, attribute_value.size() - 2)); // Remove brackets
+            string item;
+            // Count the number of fake walls
+            while (getline(ss, item, ';')) // Split by semicolon
+            {
+               num_fake_walls++;
+            }
+            // Allocate memory for the array of fake walls
             arr_fake_walls = new Position[num_fake_walls];
-        }
-        else if (line.find("ARRAY_FAKE_WALLS=") != string::npos)
-        {
-            int r, c;
-            int i = 0;
-            string positions = line.substr(line.find('=') + 1); // Get the part of the string after the equals sign
-            istringstream ss(positions);
-            string token;
-            while (getline(ss, token, ';'))
+            // reset num_fake_walls
+            num_fake_walls = 0;
+            stringstream ss2(attribute_value.substr(1, attribute_value.size() - 2)); // Create a new stringstream
+            while (getline(ss2, item, ';')) // Split by semicolon
             {
-                size_t start = token.find('(') + 1;
-                size_t end = token.find(',');
-                string r_str = token.substr(start, end - start); // Extract the string for r
-
-                start = end + 1;
-                end = token.find(')');
-                string c_str = token.substr(start, end - start); // Extract the string for c
-
-                int r = stoi(r_str); // Convert r_str to an int
-                int c = stoi(c_str); // Convert c_str to an int
-
-                arr_fake_walls[i++] = Position(r, c);
+                int row = stoi(item.substr(1, item.find(',')));
+                int col = stoi(item.substr(item.find(',') + 1, item.find(')')));
+                arr_fake_walls[num_fake_walls++] = Position(row, col);
             }
         }
-        else if (line.find("SHERLOCK_MOVING_RULE=") != string::npos)
+        else if (attribute_name == "SHERLOCK_MOVING_RULE")
         {
-            // sscanf(line.c_str(), "SHERLOCK_MOVING_RULE=%s", sherlock_moving_rule);
-            sscanf(line.c_str(), "SHERLOCK_MOVING_RULE=%s", buffer);
-            sherlock_moving_rule = buffer; // Assign to std::string 
+            sherlock_moving_rule = attribute_value;
         }
-        else if (line.find("SHERLOCK_INIT_POS=") != string::npos)
+        else if (attribute_name == "SHERLOCK_INIT_POS")
         {
-            int r, c;
-            sscanf(line.c_str(), "SHERLOCK_INIT_POS=(%d,%d)", &r, &c);
-            sherlock_init_pos = Position(r, c);
+            int row = stoi(attribute_value.substr(1, attribute_value.find(',')));
+            int col = stoi(attribute_value.substr(attribute_value.find(',') + 1, attribute_value.find(')')));
+            sherlock_init_pos = Position(row, col);
         }
-        else if (line.find("SHERLOCK_INIT_HP=") != string::npos)
+        else if (attribute_name == "SHERLOCK_INIT_HP")
         {
-            sscanf(line.c_str(), "SHERLOCK_INIT_HP=%d", &sherlock_init_hp);
+            sherlock_init_hp = stoi(attribute_value);
         }
-        else if (line.find("SHERLOCK_INIT_EXP=") != string::npos)
+        else if (attribute_name == "SHERLOCK_INIT_EXP")
         {
-            sscanf(line.c_str(), "SHERLOCK_INIT_EXP=%d", &sherlock_init_exp);
+            sherlock_init_exp = stoi(attribute_value);
         }
-        else if (line.find("WATSON_MOVING_RULE=") != string::npos)
+        else if (attribute_name == "WATSON_MOVING_RULE")
         {
-            sscanf(line.c_str(), "WATSON_MOVING_RULE=%s", buffer);
-            watson_moving_rule = buffer; // Assign to std::string
+            watson_moving_rule = attribute_value;
         }
-        else if (line.find("WATSON_INIT_POS=") != string::npos)
+        else if (attribute_name == "WATSON_INIT_POS")
         {
-            int r, c;
-            sscanf(line.c_str(), "WATSON_INIT_POS=(%d,%d)", &r, &c);
-            watson_init_pos = Position(r, c);
+            int row = stoi(attribute_value.substr(1, attribute_value.find(',')));
+            int col = stoi(attribute_value.substr(attribute_value.find(',') + 1, attribute_value.find(')')));
+            watson_init_pos = Position(row, col);
         }
-        else if (line.find("WATSON_INIT_HP=") != string::npos)
+        else if (attribute_name == "WATSON_INIT_HP")
         {
-            sscanf(line.c_str(), "WATSON_INIT_HP=%d", &watson_init_hp);
+            watson_init_hp = stoi(attribute_value);
         }
-        else if (line.find("WATSON_INIT_EXP=") != string::npos)
+        else if (attribute_name == "WATSON_INIT_EXP")
         {
-            sscanf(line.c_str(), "WATSON_INIT_EXP=%d", &watson_init_exp);
+            watson_init_exp = stoi(attribute_value);
         }
-        else if (line.find("CRIMINAL_INIT_POS=") != string::npos)
+        else if (attribute_name == "CRIMINAL_INIT_POS")
         {
-            int r, c;
-            sscanf(line.c_str(), "CRIMINAL_INIT_POS=(%d,%d)", &r, &c);
-            criminal_init_pos = Position(r, c);
+            int row = stoi(attribute_value.substr(1, attribute_value.find(',')));
+            int col = stoi(attribute_value.substr(attribute_value.find(',') + 1, attribute_value.find(')')));
+            criminal_init_pos = Position(row, col);
         }
-        else if (line.find("NUM_STEPS=") != string::npos)
+        else if (attribute_name == "NUM_STEPS")
         {
-            sscanf(line.c_str(), "NUM_STEPS=%d", &num_steps);
+            num_steps = stoi(attribute_value);
         }
     }
     file.close();
@@ -579,11 +579,42 @@ Configuration::~Configuration()
     NUM_STEPS=100
     ]
 */
+// string Configuration::str() const
+// {
+//     stringstream ss;
+//     ss << "Configuration[MAP_NUM_ROWS=" << map_num_rows << " MAP_NUM_COLS=" << map_num_cols << " MAX_NUM_MOVING_OBJECTS=" << map_num_moving_objects
+//        << " NUM_WALLS=" << num_walls << " ARRAY_WALLS=[";
+//     for (int i = 0; i < num_walls; i++)
+//     {
+//         ss << arr_walls[i].str();
+//         if (i < num_walls - 1)
+//         {
+//             ss << ";";
+//         }
+//     }
+//     ss << "] NUM_FAKE_WALLS=" << num_fake_walls << " ARRAY_FAKE_WALLS=[";
+//     for (int i = 0; i < num_fake_walls; i++)
+//     {
+//         ss << arr_fake_walls[i].str();
+//         if (i < num_fake_walls - 1)
+//         {
+//             ss << ";";
+//         }
+//     }
+
+//     ss << "] SHERLOCK_MOVING_RULE=" << sherlock_moving_rule << " SHERLOCK_INIT_POS=" << sherlock_init_pos.str() << " SHERLOCK_INIT_HP=" << sherlock_init_hp
+//        << " SHERLOCK_INIT_EXP=" << sherlock_init_exp << " WATSON_MOVING_RULE=" << watson_moving_rule << " WATSON_INIT_POS=" << watson_init_pos.str()
+//        << " WATSON_INIT_HP=" << watson_init_hp << " WATSON_INIT_EXP=" << watson_init_exp << " CRIMINAL_INIT_POS=" << criminal_init_pos.str()
+//        << " NUM_STEPS=" << num_steps << "]";
+//     return ss.str();
+// }
+
+// another version of configuration string just for passing testcase
 string Configuration::str() const
 {
     stringstream ss;
-    ss << "Configuration[MAP_NUM_ROWS=" << map_num_rows << " MAP_NUM_COLS=" << map_num_cols << " MAX_NUM_MOVING_OBJECTS=" << map_num_moving_objects
-       << " NUM_WALLS=" << num_walls << " ARRAY_WALLS=[";
+    ss << "Configuration[\nMAP_NUM_ROWS=" << map_num_rows << "\nMAP_NUM_COLS=" << map_num_cols << " \nMAX_NUM_MOVING_OBJECTS=" << map_num_moving_objects
+       << "\nNUM_WALLS=" << num_walls << "\nARRAY_WALLS=[";
     for (int i = 0; i < num_walls; i++)
     {
         ss << arr_walls[i].str();
@@ -592,7 +623,7 @@ string Configuration::str() const
             ss << ";";
         }
     }
-    ss << "] NUM_FAKE_WALLS=" << num_fake_walls << " ARRAY_FAKE_WALLS=[";
+    ss << "]\nNUM_FAKE_WALLS=" << num_fake_walls << "\nARRAY_FAKE_WALLS=[";
     for (int i = 0; i < num_fake_walls; i++)
     {
         ss << arr_fake_walls[i].str();
@@ -602,13 +633,12 @@ string Configuration::str() const
         }
     }
 
-    ss << "] SHERLOCK_MOVING_RULE=" << sherlock_moving_rule << " SHERLOCK_INIT_POS=" << sherlock_init_pos.str() << " SHERLOCK_INIT_HP=" << sherlock_init_hp
-       << " SHERLOCK_INIT_EXP=" << sherlock_init_exp << " WATSON_MOVING_RULE=" << watson_moving_rule << " WATSON_INIT_POS=" << watson_init_pos.str()
-       << " WATSON_INIT_HP=" << watson_init_hp << " WATSON_INIT_EXP=" << watson_init_exp << " CRIMINAL_INIT_POS=" << criminal_init_pos.str()
-       << " NUM_STEPS=" << num_steps << "]";
+    ss << "]\nSHERLOCK_MOVING_RULE=" << sherlock_moving_rule << "\nSHERLOCK_INIT_POS=" << sherlock_init_pos.str() << "\nSHERLOCK_INIT_HP=" << sherlock_init_hp
+       << "\nSHERLOCK_INIT_EXP=" << sherlock_init_exp << "\nWATSON_MOVING_RULE=" << watson_moving_rule << "\nWATSON_INIT_POS=" << watson_init_pos.str()
+       << "\nWATSON_INIT_HP=" << watson_init_hp << "\nWATSON_INIT_EXP=" << watson_init_exp << "\nCRIMINAL_INIT_POS=" << criminal_init_pos.str()
+       << "\nNUM_STEPS=" << num_steps << "\n]";
     return ss.str();
 }
-
 /*================ Implement of Robot class ========================*/
 Robot::Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type)
         : MovingObject(index, init_pos, map, "Robot"), robot_type(robot_type), criminal(Criminal)
@@ -720,7 +750,7 @@ int RobotC::getDistance(Watson * watson) const
 string RobotC::str() const
 {
     stringstream ss;
-    ss << "RobotC[pos=" << pos.str() << ";type=C;dist=]";
+    ss << "Robot[pos=" << pos.str() << ";type=C;dist=]";
     return ss.str();
 }
 /*================ Implement of RobotS class ========================*/
