@@ -164,6 +164,8 @@ public:
     void move();
     string str() const;
     int getExp() const {    return exp;   }
+    // additional methods
+    void setPos(const Position & pos) {    this->pos = pos;  }
 };
 
 class Watson : public Character {
@@ -250,6 +252,7 @@ public:
     RobotType robot_type;
     BaseItem * item;
     Criminal * criminal;
+    
 public:
     Robot(int index, const Position & init_pos, Map * map, Criminal * Criminal, RobotType robot_type);
 private:
@@ -459,7 +462,10 @@ public:
     }
 
     void run(bool verbose);
-
+    // additional methods
+    void sherlockEvents(int index);
+    void watsonEvents(int index);
+    void criminalEvents(int index, int & criminalMoves);
     // ~StudyPinkProgram();
 };
 

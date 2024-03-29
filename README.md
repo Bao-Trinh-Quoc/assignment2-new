@@ -86,3 +86,11 @@ Implemented the process of creating items on Robot <br>
 added destructor for watson and sherlock ' bag <br>
 changed methods in Bag to pure virtual <br>
 problems about run method <br>
+# 29/03/2024
+**When Watson and Sherlock meet, they will exchange items --- have to reread** <br>
+write 3 more additional methods for StudyPinkProgram <br>
+changed structure of run method in StudyPinkProgram <br>
+changed Robot class <br>
+changed some calculation in items <br>
+needed to check process of using item <br>
+almost done this thing! <br>

@@ -67,7 +67,7 @@ Map::~Map()
     FakeWall: Because the criminal created the maze, he can recognize 
     the fake wall, and Sherlock, with his observation ability, can detect this fake wall.
     For Watson, FakeWall will be detected (and moved through) if Watson has EXP greater than
-    the FakeWall’s required EXP. All other movable objects cannot be moved on this element.
+    the FakeWall’s required EXP. 
 */
 bool Map::isValid(const Position & pos, MovingObject * mv_obj) const
 {
@@ -901,7 +901,7 @@ void MagicBook::use(Character * obj, Robot * robot)
 {
     if (canUse(obj, robot))
     {
-        obj->setExp(obj->getExp() * 1.25);
+        obj->setExp(ceil(obj->getExp() * 1.25));
     }
 }
 /*================ Implement of EnergyDrink class ========================*/
@@ -913,7 +913,7 @@ void EnergyDrink::use(Character * obj, Robot * robot)
 {
     if (canUse(obj, robot))
     {
-        obj->setHp(obj->getHp() * 1.20);
+        obj->setHp(ceil(obj->getHp() * 1.20));
     }
 }
 /*================ Implement of FirstAid class ========================*/
@@ -925,7 +925,7 @@ void FirstAid::use(Character * obj, Robot * robot)
 {
     if (canUse(obj, robot))
     {
-        obj->setHp(obj->getHp() * 1.50);
+        obj->setHp(ceil(obj->getHp() * 1.50));
     }
 }
 /*================ Implement of ExcemptionCard class ========================*/
@@ -1308,23 +1308,241 @@ bool StudyPinkProgram::isStop() const
 }
 void StudyPinkProgram::run(bool verbose)
 {
-    int criminalMoves = 0;
     // Note: This is a sample code. You can change the implementation as you like.
     // TODO
+    int criminalMoves = 0;
     for (int istep = 0; istep < config->num_steps; ++istep) {
-        for (int i = 0; i < arr_mv_objs->size(); ++i) {
-            arr_mv_objs->get(i)->move();
+            for (int i = 0; i < arr_mv_objs->size(); ++i) {
+                if (verbose) 
+                {
+                    sherlockEvents(i);
+                    watsonEvents(i);
+                    arr_mv_objs->get(i)->move();
+                    // update here
+                    criminalEvents(i, criminalMoves);
+                    sherlockEvents(i);
+                    watsonEvents(i);
+                    printStep(istep);
 
-            if (isStop()) {
-                printStep(istep);
-                break;
-            }
-            if (verbose) {
-                printStep(istep);
+                    if (isStop()) {
+                        printStep(istep);
+                        break;
+                    }
+                }
+                else
+                {
+                    arr_mv_objs->get(i)->move();
+                }
+
+            if (i == arr_mv_objs->size() - 1)
+            {
+                for (int j = 0; j < arr_mv_objs->size(); j++)
+                {
+                    if (isStop()) {
+                        printStep(istep);
+                        break;
+                    }
+                    criminalEvents(j, criminalMoves);
+                    sherlockEvents(j);
+                    watsonEvents(j);       
+                }
+
             }
         }
     }
     printResult();
+}
+
+void StudyPinkProgram::sherlockEvents(int index)
+{
+        // If Sherlock meets:
+        /*
+            RobotS: Sherlock needs to solve a problem to win against RobotS. If Sherlock’s EXP
+            is now greater than 400, Sherlock will solve the problem and receive the item this
+            robot holds. Otherwise, Sherlock’s EXP will be lost by 10%.
+            RobotW: Sherlock will pass and receive the item without having to fight.
+            RobotSW: Sherlock can only win against RobotSW when EXP of Sherlock is
+            greater than 300 and HP of Sherlock greater than 335. If he wins, Sherlock
+            receives the item this robot holds. Otherwise, Sherlock will lose 15% HP and 15%
+            EXP.
+            RobotC: Sherlock meeting RobotC means meeting the location next to the criminal.
+            At this time, if Sherlock’s EXP is greater than 500, Sherlock will defeat the robot
+            and capture the criminal (no items this robot holds). On the contrary, Sherlock will
+            let criminals escape. However, you will still be able to destroy the robot and receive
+            the items this robot holds
+        */
+        if (arr_mv_objs->get(index)->getName() == "RobotS" && sherlock->getCurrentPosition() == arr_mv_objs->get(index)->getCurrentPosition())
+        {
+            Robot* robot = dynamic_cast<Robot*>(arr_mv_objs->get(index));
+            if (sherlock->getExp() > 400)
+            {
+                if (robot) 
+                {
+                    sherlock_bag->insert(robot->item);
+                }
+            }
+            else
+            {
+                if (sherlock_bag->get(EXCEMPTION_CARD)->canUse(sherlock, robot) == false)
+                {
+                    sherlock->setExp(ceil(sherlock->getExp() * 0.90));
+                }
+            }
+        }
+        else if (arr_mv_objs->get(index)->getName() == "RobotW" && sherlock->getCurrentPosition() == arr_mv_objs->get(index)->getCurrentPosition())
+        {
+            Robot* robot = dynamic_cast<Robot*>(arr_mv_objs->get(index));
+            if (robot) 
+            {
+                sherlock_bag->insert(robot->item);
+            }
+        }
+        else if (arr_mv_objs->get(index)->getName() == "RobotSW" && sherlock->getCurrentPosition() == arr_mv_objs->get(index)->getCurrentPosition())
+        {
+            Robot* robot = dynamic_cast<Robot*>(arr_mv_objs->get(index));
+            if (sherlock->getExp() > 300 && sherlock->getHp() > 335)
+            {
+                if (robot) 
+                {
+                    sherlock_bag->insert(robot->item);
+                }
+            }
+            else
+            {
+                if (sherlock_bag->get(EXCEMPTION_CARD)->canUse(sherlock, robot) == false)
+                {
+                    sherlock->setExp(ceil(sherlock->getExp() * 0.85));
+                    sherlock->setHp(ceil(sherlock->getHp() * 0.85));
+                }
+            }
+        }
+        else if (arr_mv_objs->get(index)->getName() == "RobotC" && sherlock->getCurrentPosition() == arr_mv_objs->get(index)->getCurrentPosition())
+        {
+            if (sherlock->getExp() > 500)
+            {
+                /*
+                    Sherlock will defeat the robot
+                    and capture the criminal (no items this robot holds
+                */
+                sherlock->setPos(criminal->getCurrentPosition());
+            }
+            else
+            {
+                Robot* robot = dynamic_cast<Robot*>(arr_mv_objs->get(index));
+                if (robot) 
+                {
+                    sherlock_bag->insert(robot->item);
+                }
+            }
+        }
+        else if (arr_mv_objs->get(index)->getName() == "Watson" && sherlock->getCurrentPosition() == arr_mv_objs->get(index)->getCurrentPosition())
+        {
+            while(sherlock_bag->get(PASSING_CARD) != nullptr)
+            {
+                watson_bag->insert(sherlock_bag->get(PASSING_CARD));
+            }
+            while(watson_bag->get(EXCEMPTION_CARD) != nullptr)
+            {
+                sherlock_bag->insert(watson_bag->get(EXCEMPTION_CARD));
+            }
+        }
+}
+
+void StudyPinkProgram::watsonEvents(int index)
+{
+    /*
+    RobotS: Watson will not perform any actions with the robot and will not receive
+    items held by this robot.
+    RobotW:Watsonneedstoconfront this Robot and only win when it has HP greater
+    than 350. If Watson wins, Watson will receive the item held by the robot. If he
+    loses, Watson’s HP will be reduced by 5%.
+    RobotSW: Watson can only win against RobotSW when Watson’s EXP is greater
+    than 600 and Watson’s HP is greater than 165. If he wins, Watson receives the
+    item that this robot holds. Otherwise, Watson will lose 15% HP and 15% EXP.
+    Watson meets RobotC, which means he has met the location adjacent to the
+    criminal. Watson could not catch the criminal because he was held back by RobotC.
+    However, Watson will still destroy the robot and receive the item this robot holds.
+    */
+    if (arr_mv_objs->get(index)->getName() == "RobotS" && arr_mv_objs->get(index)->getCurrentPosition() == watson->getCurrentPosition())
+    {
+
+    }
+    else if (arr_mv_objs->get(index)->getName() == "RobotW" && arr_mv_objs->get(index)->getCurrentPosition() == watson->getCurrentPosition())
+    {
+        Robot * robot = dynamic_cast<Robot*>(arr_mv_objs->get(index));
+        if (watson->getHp() > 350)
+        {
+            if (robot) 
+            {
+                watson_bag->insert(robot->item);
+            }
+        }
+        else
+        {
+            if (watson_bag->get(PASSING_CARD)->canUse(watson, robot) == false)
+            {
+                watson->setHp(ceil(watson->getHp() * 0.95));
+            }
+            else 
+            {
+                
+            }
+        }
+    }
+
+}
+
+
+void StudyPinkProgram::criminalEvents(int index, int & criminalMoves)
+{
+               /*
+        During the criminal’s movement, for every 3 steps that the criminal moves, a robot will be
+        created. Note that when the getNextPosition method of Criminal does not return a valid
+        move position, the move method does not perform the move, which is not counted as a move.
+        */
+        if (arr_mv_objs->get(index)->getName() == "Criminal" && criminal->getNextPosition() != Position::npos)
+        {
+            criminalMoves++;
+            if (criminalMoves == 3)
+            {
+                /*
+                After every 3 steps of the criminal, a robot will be created at that location
+                If it is the first robot created on the map, it will be the robot type RobotC.
+                Closer distance to Sherlock’s location: Create a robot RobotS
+                Closer distance to Watson’s location: Creating a robot RobotW
+                The distance to Sherlock and Watson’s location is equal: Create a robot RobotSW
+                */
+                if (arr_mv_objs->size() == 3)
+                {
+                    newRobot = new RobotC(4, criminal->getPreviousPosition(), map, criminal, C);
+                }
+                else
+                {
+                    int distance_sherlock = abs(criminal->getPreviousPosition().getRow() - sherlock->getCurrentPosition().getRow()) 
+                                            + abs(criminal->getPreviousPosition().getCol() - sherlock->getCurrentPosition().getCol());
+                    int distance_watson = abs(criminal->getPreviousPosition().getRow() - watson->getCurrentPosition().getRow()) 
+                                            + abs(criminal->getPreviousPosition().getCol() - watson->getCurrentPosition().getCol());
+                    if (distance_sherlock < distance_watson)
+                    {
+                        newRobot = new RobotS(arr_mv_objs->size(), criminal->getPreviousPosition(), map, criminal, sherlock, S);
+                    }
+                    else if (distance_sherlock > distance_watson)
+                    {
+                        newRobot = new RobotW(arr_mv_objs->size(), criminal->getPreviousPosition(), map, criminal, watson, W);
+                    }
+                    else
+                    {
+                        newRobot = new RobotSW(arr_mv_objs->size(), criminal->getPreviousPosition(), map, criminal, sherlock, watson, SW);
+                    }
+                }
+                // added robot to the array of moving objects suppose the array is no full
+                if (!arr_mv_objs->isFull())
+                {
+                    arr_mv_objs->add(newRobot);
+                }
+                criminalMoves = 0;
+            }
+        }
 }
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
