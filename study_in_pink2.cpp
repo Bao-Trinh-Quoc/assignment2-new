@@ -813,7 +813,7 @@ int RobotS::getDistance(Sherlock * sherlock) const
 string RobotS::str() const
 {
     stringstream ss;
-    ss << "RobotS[pos=" << pos.str() << ";type=S;dist=" << getDistance(sherlock) << "]";
+    ss << "Robot[pos=" << pos.str() << ";type=S;dist=" << getDistance(sherlock) << "]";
     return ss.str();
 }
 /*================ Implement of RobotW class ========================*/
@@ -871,7 +871,7 @@ int RobotW::getDistance(Watson * watson) const
 string RobotW::str() const
 {
     stringstream ss;
-    ss << "RobotW[pos=" << pos.str() << ";type=W;dist=" << getDistance(watson) << "]";
+    ss << "Robot[pos=" << pos.str() << ";type=W;dist=" << getDistance(watson) << "]";
     return ss.str();
 }
 /*================ Implement of RobotSW class ========================*/
@@ -937,7 +937,7 @@ int RobotSW::getDistance(Sherlock * sherlock, Watson * watson) const
 string RobotSW::str() const
 {
     stringstream ss;
-    ss << "RobotSW[pos=" << pos.str() << ";type=SW;dist=" << getDistance(sherlock, watson) << "]";
+    ss << "Robot[pos=" << pos.str() << ";type=SW;dist=" << getDistance(sherlock, watson) << "]";
     return ss.str();
 }
 

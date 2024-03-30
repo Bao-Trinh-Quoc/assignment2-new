@@ -106,3 +106,4 @@ updated confiugration <br>
 yayyay <br>
 still need to update it regularly tho <br>
 hehe learned how to use .gitignore <br>
+changed str method in robot <br>
