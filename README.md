@@ -110,3 +110,4 @@ changed str method in robot <br>
 # 03/04/2024
 Added getSize and getMaxSize in sherlock_bag and watson_bag <br>
 added condition when Sherlock and Watson meet, they will exchange their items as long as the size of their bag is not exceed the max size and had that item <br>
+Changed from get to peak in the condition at exchange items <br>
