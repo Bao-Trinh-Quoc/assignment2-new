@@ -405,6 +405,8 @@ public:
     string str() const; 
     // additional methods
     BaseItem * peak(ItemType itemType);
+    int getSize() const {   return currentSize;   }
+    int getMaxSize() const {    return maxSize;    }
 };
 
 class WatsonBag : public BaseBag
@@ -421,6 +423,8 @@ public:
     string str() const;  
     // additional methods
     BaseItem * peak(ItemType itemType);
+    int getSize() const {   return currentSize;   }
+    int getMaxSize() const {    return maxSize;    }
 };
 
 class StudyPinkProgram {

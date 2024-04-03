@@ -1566,11 +1566,11 @@ void StudyPinkProgram::sherlockEvents(int index)
         }
         else if (arr_mv_objs->get(index)->getName() == "Watson" && sherlock->getCurrentPosition() == arr_mv_objs->get(index)->getCurrentPosition())
         {
-            while(sherlock_bag->get(PASSING_CARD) != nullptr)
+            while(sherlock_bag->get(PASSING_CARD) != nullptr && watson_bag->getSize() < watson_bag->getMaxSize())
             {
                 watson_bag->insert(sherlock_bag->get(PASSING_CARD));
             }
-            while(watson_bag->get(EXCEMPTION_CARD) != nullptr)
+            while(watson_bag->get(EXCEMPTION_CARD) != nullptr && sherlock_bag->getSize() < sherlock_bag->getMaxSize())
             {
                 sherlock_bag->insert(watson_bag->get(EXCEMPTION_CARD));
             }
@@ -1695,7 +1695,18 @@ void StudyPinkProgram::watsonEvents(int index)
         {
             watson_bag->get(FIRST_AID)->use(watson, nullptr);
         }
-    }   
+    } 
+    else if (arr_mv_objs->get(index)->getName() == "Sherlock" && watson->getCurrentPosition() == arr_mv_objs->get(index)->getCurrentPosition())
+    {
+        while(watson_bag->get(PASSING_CARD) != nullptr && sherlock_bag->getSize() < sherlock_bag->getMaxSize())
+        {
+            sherlock_bag->insert(watson_bag->get(PASSING_CARD));
+        }
+        while(sherlock_bag->get(EXCEMPTION_CARD) != nullptr && watson_bag->getSize() < watson_bag->getMaxSize())
+        {
+            watson_bag->insert(sherlock_bag->get(EXCEMPTION_CARD));
+        }
+    }  
 }
 
 

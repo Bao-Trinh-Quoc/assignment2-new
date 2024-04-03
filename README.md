@@ -107,3 +107,6 @@ yayyay <br>
 still need to update it regularly tho <br>
 hehe learned how to use .gitignore <br>
 changed str method in robot <br>
+# 03/04/2024
+Added getSize and getMaxSize in sherlock_bag and watson_bag <br>
+added condition when Sherlock and Watson meet, they will exchange their items as long as the size of their bag is not exceed the max size and had that item <br>
