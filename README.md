@@ -113,3 +113,12 @@ added condition when Sherlock and Watson meet, they will exchange their items as
 Changed from get to peak in the condition at exchange items <br>
 # 07/05/2024
 back to work! <br>
+# 18/05/2024
+checked Map's Elements <br>
+checked Map's methods <br>
+checked Position's methods <br>
+
+**Changed from ==  to <= in isStop method in StudyInPink class**  <br>
+
+Checked Sherlock's methods <br>
+Added more conditions for Sherlock to move <br>

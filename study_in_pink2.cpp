@@ -154,7 +154,7 @@ bool Position::isEqual(const Position & pos) const
 {
     return (r == pos.r && c == pos.c);
 }
-const Position Position::npos = Position(-1, -1);
+const Position Position::npos = Position(-1, -1);  
 
 /*================ Implement of Sherlock class ========================*/
 Sherlock::Sherlock(int index, const string & moving_rule, const Position & init_pos, Map * map, int init_hp, int init_exp)
@@ -215,7 +215,8 @@ Position Sherlock::getNextPosition()
 void Sherlock::move()
 {
     Position next_pos = getNextPosition();
-    if (next_pos != Position::npos)
+    // if Exp <= 0, Sherlock cannot move
+    if (next_pos != Position::npos && exp > 0)
     {
         pos = next_pos;
     }
@@ -1378,7 +1379,7 @@ StudyPinkProgram::~StudyPinkProgram()
 */
 bool StudyPinkProgram::isStop() const
 {
-    return (sherlock->getHp() == 0) || (watson->getHp() == 0) 
+    return (sherlock->getHp() <= 0) || (watson->getHp() <= 0) 
             || (sherlock->getCurrentPosition() == criminal->getCurrentPosition())
             || (watson->getCurrentPosition() == criminal->getCurrentPosition());
 }
