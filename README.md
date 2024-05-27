@@ -129,3 +129,10 @@ changed getDistance in Robot class <br>
 changed from getRegExp to getReqExp in FakeWall <br>
 changed from elements to map in class MAP <br>
 changed str() in ArrayMovingObject class -- nah needed to check this <br>
+
+Changed methods in BaseBag from pure virtual methods to virtual methods --- hmmm needed to think carefully about that.<br>
+updated move condition for Watson and Sherlock <br>
+
+changed the condition when program stops <br>
+
+Checked! <br>

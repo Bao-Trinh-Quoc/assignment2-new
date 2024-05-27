@@ -377,18 +377,18 @@ class BaseBag
     friend class TestStudyInPink;
 protected:
     Character * obj;
-    BaseItem * head;
+    BaseItem * head;    
 public:
     BaseBag(Character * obj) : obj(obj) { head = nullptr; }
     virtual ~BaseBag() {}
     // return true if insert successfully
-    virtual bool insert(BaseItem * item) = 0;
+    virtual bool insert(BaseItem * item) { return false; };
     // return the item as described above, if not found, return NULL
-    virtual BaseItem * get() = 0;
+    virtual BaseItem * get() { return nullptr; };
     // return the item as described above, if not found, return NULL
-    virtual BaseItem * get(ItemType itemType) = 0;
+    virtual BaseItem * get(ItemType itemType) { return nullptr; };
     // Bag[count=<c>;<list_items>]
-    virtual string str() const = 0;
+    virtual string str() const { return ""; };
 };
 
 class SherlockBag : public BaseBag

@@ -215,8 +215,8 @@ Position Sherlock::getNextPosition()
 void Sherlock::move()
 {
     Position next_pos = getNextPosition();
-    // if Exp <= 0, Sherlock cannot move
-    if (next_pos != Position::npos && exp > 0)
+    // if Exp <= 0 or hp <= 0, Sherlock cannot move
+    if (next_pos != Position::npos && exp > 0 && hp > 0)
     {
         pos = next_pos;
     }
@@ -279,7 +279,8 @@ Position Watson::getNextPosition()
 void Watson::move()
 {
     Position next_pos = getNextPosition();
-    if (next_pos != Position::npos)
+    // if Exp <= 0 or hp <= 0, Watson cannot move
+    if (next_pos != Position::npos && exp > 0 && hp > 0)
     {
         pos = next_pos;
     }
@@ -1381,7 +1382,7 @@ StudyPinkProgram::~StudyPinkProgram()
 */
 bool StudyPinkProgram::isStop() const
 {
-    return (sherlock->getHp() <= 0) || (watson->getHp() <= 0) 
+    return (sherlock->getHp() <= 1) || (watson->getHp() <= 1) 
             || (sherlock->getCurrentPosition() == criminal->getCurrentPosition())
             || (watson->getCurrentPosition() == criminal->getCurrentPosition());
 }
