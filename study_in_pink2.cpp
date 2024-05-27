@@ -10,40 +10,40 @@
 /*======================= Implement the Map class ===================== */ 
 // Constructor needs to create a 2D array which each element is an appropriate object.
 // If this element is in the array_walls, this element is Wall object.
-//  it is FakeWall object if it exists in array_fake_walls. The other elements are Path objects.
+//  it is FakeWall object if it exists in array_fake_walls. The other map are Path objects.
 Map::Map(int num_rows, int num_cols, int num_walls, Position * array_walls, int num_fake_walls, Position * array_fake_walls)
         : num_rows(num_rows), num_cols(num_cols)
 {
     // Create a 2D array of MapElement pointers
-    elements = new MapElement ** [num_rows];
+    map = new MapElement ** [num_rows];
     for (int i = 0; i < num_rows; i++)
     {
-        elements[i] = new MapElement * [num_cols];
+        map[i] = new MapElement * [num_cols];
     }
     // Initialize the array with Path objects
     for (int i = 0; i < num_rows; i++)
     {
         for (int j = 0; j < num_cols; j++)
         {
-            elements[i][j] = new Path();
+            map[i][j] = new Path();
         }
     }
-    // Replace appropriate elements with Wall objects
+    // Replace appropriate map with Wall objects
     for (int i = 0; i < num_walls; i++)
     {
         int row = array_walls[i].getRow();
         int col = array_walls[i].getCol();
-        delete elements[row][col];
-        elements[row][col] = new Wall();
+        delete map[row][col];
+        map[row][col] = new Wall();
     }
-    // Replace appropriate elements with FakeWall objects
+    // Replace appropriate map with FakeWall objects
     for (int i = 0; i < num_fake_walls; i++)
     {
         int row = array_fake_walls[i].getRow();
         int col = array_fake_walls[i].getCol();
-        delete elements[row][col];
+        delete map[row][col];
         int fakeWallExp = (row * 257 + col * 139 + 89) % 900 + 1;
-        elements[row][col] = new FakeWall(fakeWallExp);
+        map[row][col] = new FakeWall(fakeWallExp);
     }
 }
 Map::~Map()
@@ -53,11 +53,11 @@ Map::~Map()
     {
         for (int j = 0; j < num_cols; j++)
         {
-            delete elements[i][j];
+            delete map[i][j];
         }
-        delete[] elements[i];
+        delete[] map[i];
     }
-    delete[] elements;
+    delete[] map;
 }
 
 /*  checks whether the location pos is a valid location for the object mv_obj to move to
@@ -79,17 +79,17 @@ bool Map::isValid(const Position & pos, MovingObject * mv_obj) const
         return false;
     }
     // Check if the object is a Path
-    if (elements[row][col]->getType() == PATH)
+    if (map[row][col]->getType() == PATH)
     {
         return true;
     }
     // Check if the object is a Wall
-    if (elements[row][col]->getType() == WALL)
+    if (map[row][col]->getType() == WALL)
     {
         return false;
     }
     // Check if the object is a FakeWall
-    if (elements[row][col]->getType() == FAKE_WALL)
+    if (map[row][col]->getType() == FAKE_WALL)
     {
         // Check if the object is a MovingObject
         if (mv_obj != nullptr)
@@ -98,7 +98,7 @@ bool Map::isValid(const Position & pos, MovingObject * mv_obj) const
             if (mv_obj->getName() == "Watson")
             {
                 // Check if the Watson's EXP is greater than the FakeWall's required EXP
-                if (mv_obj->getExp() > dynamic_cast<FakeWall *>(elements[row][col])->getRegExp())
+                if (mv_obj->getExp() > dynamic_cast<FakeWall *>(map[row][col])->getReqExp())
                 {
                     return true;
                 }
@@ -401,7 +401,9 @@ bool ArrayMovingObject::add(MovingObject * mv_obj)
 string ArrayMovingObject::str() const
 {
     stringstream ss;
-    ss << "ArrayMovingObject[count=" << count << ";capacity=" << capacity << ";";
+    ss << "ArrayMovingObject[count=" << count << ";capacity=" << capacity;
+    if (count != 0)
+        ss << ";";
     for (int i = 0; i < count; i++)
     {
         ss << arr_mv_objs[i]->str();
@@ -459,7 +461,7 @@ Configuration::Configuration(const string & filepath)
         }
         else if (attribute_name == "MAX_NUM_MOVING_OBJECTS")
         {
-            map_num_moving_objects = stoi(attribute_value);
+            max_num_moving_objects = stoi(attribute_value);
         }
         else if (attribute_name == "ARRAY_WALLS")
         {
@@ -614,7 +616,7 @@ Configuration::~Configuration()
 string Configuration::str() const
 {
     stringstream ss;
-    ss << "Configuration[\nMAP_NUM_ROWS=" << map_num_rows << "\nMAP_NUM_COLS=" << map_num_cols << " \nMAX_NUM_MOVING_OBJECTS=" << map_num_moving_objects
+    ss << "Configuration[\nMAP_NUM_ROWS=" << map_num_rows << "\nMAP_NUM_COLS=" << map_num_cols << " \nMAX_NUM_MOVING_OBJECTS=" << max_num_moving_objects
        << "\nNUM_WALLS=" << num_walls << "\nARRAY_WALLS=[";
     for (int i = 0; i < num_walls; i++)
     {
@@ -807,14 +809,14 @@ void RobotS::move()
         pos = next_pos;
     }
 }
-int RobotS::getDistance(Sherlock * sherlock) const
+int RobotS::getDistance() const
 {
     return abs(pos.getRow() - sherlock->getCurrentPosition().getRow()) + abs(pos.getCol() - sherlock->getCurrentPosition().getCol());
 }
 string RobotS::str() const
 {
     stringstream ss;
-    ss << "Robot[pos=" << pos.str() << ";type=S;dist=" << getDistance(sherlock) << "]";
+    ss << "Robot[pos=" << pos.str() << ";type=S;dist=" << getDistance() << "]";
     return ss.str();
 }
 /*================ Implement of RobotW class ========================*/
@@ -865,14 +867,14 @@ void RobotW::move()
         pos = next_pos;
     }
 }
-int RobotW::getDistance(Watson * watson) const
+int RobotW::getDistance() const
 {
     return abs(pos.getRow() - watson->getCurrentPosition().getRow()) + abs(pos.getCol() - watson->getCurrentPosition().getCol());
 }
 string RobotW::str() const
 {
     stringstream ss;
-    ss << "Robot[pos=" << pos.str() << ";type=W;dist=" << getDistance(watson) << "]";
+    ss << "Robot[pos=" << pos.str() << ";type=W;dist=" << getDistance() << "]";
     return ss.str();
 }
 /*================ Implement of RobotSW class ========================*/
@@ -929,7 +931,7 @@ void RobotSW::move()
         pos = next_pos;
     }
 }
-int RobotSW::getDistance(Sherlock * sherlock, Watson * watson) const
+int RobotSW::getDistance() const
 {
     int distance_sherlock = abs(pos.getRow() - sherlock->getCurrentPosition().getRow()) + abs(pos.getCol() - sherlock->getCurrentPosition().getCol());
     int distance_watson   = abs(pos.getRow() - watson->getCurrentPosition().getRow()) + abs(pos.getCol() - watson->getCurrentPosition().getCol());
@@ -938,7 +940,7 @@ int RobotSW::getDistance(Sherlock * sherlock, Watson * watson) const
 string RobotSW::str() const
 {
     stringstream ss;
-    ss << "Robot[pos=" << pos.str() << ";type=SW;dist=" << getDistance(sherlock, watson) << "]";
+    ss << "Robot[pos=" << pos.str() << ";type=SW;dist=" << getDistance() << "]";
     return ss.str();
 }
 
@@ -1353,7 +1355,7 @@ StudyPinkProgram::StudyPinkProgram(const string & config_file_path)
 {
     config = new Configuration(config_file_path);
     map = new Map(config->map_num_rows, config->map_num_cols, config->num_walls, config->arr_walls, config->num_fake_walls, config->arr_fake_walls);
-    arr_mv_objs = new ArrayMovingObject(config->map_num_moving_objects);
+    arr_mv_objs = new ArrayMovingObject(config->max_num_moving_objects);
     sherlock = new Sherlock(1, config->sherlock_moving_rule, config->sherlock_init_pos, map, config->sherlock_init_hp, config->sherlock_init_exp);
     watson = new Watson(2, config->watson_moving_rule, config->watson_init_pos, map, config->watson_init_hp, config->watson_init_exp);
     criminal = new Criminal(0, config->criminal_init_pos, map, sherlock, watson);

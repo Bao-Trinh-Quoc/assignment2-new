@@ -122,3 +122,10 @@ checked Position's methods <br>
 
 Checked Sherlock's methods <br>
 Added more conditions for Sherlock to move <br>
+
+# 27/05/2024
+added extra testcase <br>
+changed getDistance in Robot class <br>
+changed from getRegExp to getReqExp in FakeWall <br>
+changed from elements to map in class MAP <br>
+changed str() in ArrayMovingObject class -- nah needed to check this <br>

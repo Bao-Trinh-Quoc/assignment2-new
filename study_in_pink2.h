@@ -78,14 +78,14 @@ public:
     FakeWall(int in_reg_exp) : MapElement(FAKE_WALL), reg_exp(in_reg_exp) {};
     ~FakeWall() {};
     // additional methods
-    int getRegExp() const {    return reg_exp;   }
+    int getReqExp() const {    return reg_exp;   }
 };
 
 class Map {
     friend class TestStudyInPink;
 private:
     int num_rows, num_cols;
-    MapElement *** elements;
+    MapElement *** map;
 public:
     Map(int num_rows, int num_cols, int num_walls, Position * array_walls, int num_fake_walls, Position * array_fake_walls);
     ~Map();
@@ -189,7 +189,7 @@ private:
     // TODO
     Sherlock * sherlock;
     Watson  * watson;
-    Position prev_pos;
+    Position prev_pos = Position::npos;
 public:
     Criminal(int index, const Position & init_pos, Map * map, Sherlock * sherlock, Watson * watson);
     Position getCurrentPosition() const {   return pos; }
@@ -223,7 +223,7 @@ class Configuration {
 private: 
     // TODO
     int map_num_rows = 0, map_num_cols = 0;
-    int map_num_moving_objects = 0;
+    int max_num_moving_objects = 0;
     int num_walls = 0;  // Number of Wall objects
     Position * arr_walls; 
     int num_fake_walls = 0;  // Number of FakeWall objects
@@ -283,7 +283,7 @@ public:
     Position getCurrentPosition() const {   return pos; }
     Position getNextPosition();
     void move();
-    int getDistance(Sherlock * sherlock) const;
+    int getDistance() const;
     string str() const;
 };
 
@@ -297,7 +297,7 @@ public:
     Position getCurrentPosition() const {   return pos; }
     Position getNextPosition();
     void move();
-    int getDistance(Watson * watson) const;
+    int getDistance() const;
     string str() const;
 };
 
@@ -312,7 +312,7 @@ public:
     Position getCurrentPosition() const {   return pos; }
     Position getNextPosition();
     void move();
-    int getDistance(Sherlock * sherlock, Watson * watson) const;
+    int getDistance() const;
     string str() const;
 };
 
