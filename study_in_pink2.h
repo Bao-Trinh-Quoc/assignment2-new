@@ -333,6 +333,7 @@ class MagicBook : public BaseItem
 {
     friend class TestStudyInPInk;
 public:
+    MagicBook() { itemType = MAGIC_BOOK; }
     bool canUse(Character * obj, Robot * robot);
     void use(Character * obj, Robot * robot);
 };
@@ -341,6 +342,7 @@ class EnergyDrink : public BaseItem
 {
     friend class TestStudyInPink;
 public:
+    EnergyDrink() { itemType = ENERGY_DRINK; }
     bool canUse(Character * obj, Robot * robot);
     void use(Character * obj, Robot * robot);
 };
@@ -349,6 +351,7 @@ class FirstAid : public BaseItem
 {
     friend class TestStudyInPink;
 public:
+    FirstAid() { itemType = FIRST_AID; }
     bool canUse(Character * obj, Robot * robot);
     void use(Character * obj, Robot * robot);
 };
@@ -357,6 +360,7 @@ class ExcemptionCard : public BaseItem
 {
     friend class TestStudyInPink;
 public:
+    ExcemptionCard() { itemType = EXCEMPTION_CARD; }
     bool canUse(Character * obj, Robot * robot);
     void use(Character * obj, Robot * robot);
 };
@@ -367,7 +371,7 @@ class PassingCard : public BaseItem
 private:
     string challenge;
 public:
-    PassingCard(const string & challenge) : challenge(challenge) {};
+    PassingCard(const string & challenge) : challenge(challenge) { itemType = PASSING_CARD; };
     bool canUse(Character * obj, Robot * robot);
     void use(Character * obj, Robot * robot);
 };

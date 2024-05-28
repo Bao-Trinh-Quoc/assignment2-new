@@ -108,12 +108,7 @@ using namespace std;
 //     }
 // };
 
-// // add more testcases here
-// void tc_1001() {
-//     cout << "----- Testcase 01 -----" << endl;
-//     Path path = Path();
-//     cout << path.getType();
-// }
+
 
 int main(int argc, const char * argv[]) {
     // TestStudyInPink::satc_01();
@@ -121,43 +116,24 @@ int main(int argc, const char * argv[]) {
     // TestStudyInPink::satc_03();
     
     // TestStudyInPink::tc_1001();
-    // cout << endl;
     // TestStudyInPink::tc_1004();
-    // cout << endl;
     // TestStudyInPink::tc_1009();
-    // cout << endl;
     // TestStudyInPink::tc_1014();
-    // cout << endl;
     // TestStudyInPink::tc_1015();
-    // cout << endl;
     // TestStudyInPink::tc_1016();
-    // cout << endl;
     // TestStudyInPink::tc_1017();
-    // cout << endl;
     // TestStudyInPink::tc_1043();
-    // cout << endl;
     // TestStudyInPink::tc_1057();
-    // cout << endl;
     // TestStudyInPink::tc_1062();
-    // cout << endl;
     // TestStudyInPink::tc_1063();
-    // cout << endl;
     // TestStudyInPink::tc_1066();
-    // cout << endl;
     // TestStudyInPink::tc_1067();
-    // cout << endl;
     // TestStudyInPink::tc_1070();
-    // cout << endl;
     // TestStudyInPink::tc_1094();
-    // cout << endl;
     // TestStudyInPink::tc_1099();
-    // cout << endl;
     // TestStudyInPink::tc_1109();
-    // cout << endl;
     // TestStudyInPink::tc_1114();
-    // cout << endl;
     // TestStudyInPink::tc_1120();
-    // cout << endl;
     // TestStudyInPink::tc_1132();
     // TestStudyInPink::tc_1138();
     // TestStudyInPink::tc_1143();
@@ -176,7 +152,7 @@ int main(int argc, const char * argv[]) {
     // TestStudyInPink::tc_1286();
     // TestStudyInPink::tc_1278();
     // TestStudyInPink::tc_1354();
-    TestStudyInPink::tc_1194();
-
+    // TestStudyInPink::tc_1194();
+    TestStudyInPink::tc_1298();
     return 0;
 }   

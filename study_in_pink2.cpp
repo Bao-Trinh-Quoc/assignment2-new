@@ -763,7 +763,7 @@ RobotS::RobotS(int index, const Position & init_pos, Map * map, Criminal * Crimi
 {}
 
 /*
-    Move to the next location 1 unit away from the original and closest to Sherlock’s next location.
+    Move to the next location 1 unit away from the original and closest to Sherlock’s current location.
     the distance referred to is the Manhattan distance
     If there are multiple nearest locations, the order of selection clockwise rotation
     starting from the upwards direction, and selecting the first location
@@ -774,7 +774,7 @@ Position RobotS::getNextPosition()
         Move to the next location 1 unit away from the original and closest to
         Sherlock’s next location (Mathantann dstance)
     */
-    // U R D : 
+    // U R D L
     Position directions[] = {Position(-1, 0), Position(0, 1), Position(1, 0), Position(0, -1)};
     int nearestDistance = INT_MAX;
     Position next_pos = Position::npos;
@@ -825,7 +825,7 @@ RobotW::RobotW(int index, const Position & init_pos, Map * map, Criminal * Crimi
         : Robot(index, init_pos, map, Criminal, robot_type), watson(watson)
 {}
 /*
-    Move to the next location 1 unit away from the original and closest to Watson’s next location.
+    Move to the next location 1 unit away from the original and closest to Watson’s current location.
     the distance referred to is the Manhattan distance
     If there are multiple nearest locations, the order of selection clockwise rotation
     starting from the upwards direction, and selecting the first location
@@ -1411,23 +1411,34 @@ void StudyPinkProgram::run(bool verbose)
                 }
                 else
                 {
+                    sherlockEvents(i);
+                    watsonEvents(i);
                     arr_mv_objs->get(i)->move();
-                }
+                    // update here
+                    criminalEvents(i, criminalMoves);
+                    sherlockEvents(i);
+                    watsonEvents(i);
 
-            if (i == arr_mv_objs->size() - 1)
-            {
-                for (int j = 0; j < arr_mv_objs->size(); j++)
-                {
                     if (isStop()) {
                         printStep(istep);
                         break;
                     }
-                    criminalEvents(j, criminalMoves);
-                    sherlockEvents(j);
-                    watsonEvents(j);       
                 }
 
-            }
+                if (i == arr_mv_objs->size() - 1)
+                {
+                    for (int j = 0; j < arr_mv_objs->size(); j++)
+                    {
+                        if (isStop()) {
+                            printStep(istep);
+                            break;
+                        }
+                        criminalEvents(j, criminalMoves);
+                        sherlockEvents(j);
+                        watsonEvents(j);       
+                    }
+
+                }
         }
     }
     printResult();

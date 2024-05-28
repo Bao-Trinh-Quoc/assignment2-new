@@ -456,6 +456,35 @@ void tc_1297() {
     delete sherlock;
     delete sherlockBag;
 }
+
+void tc_1298() {
+    cout << "----- Testcase 298 -----" << endl;
+    int num_walls = 4;
+    Position arr_walls[] = {Position(1, 2), Position(2, 3), Position(3, 4), Position(4,5)};
+    int num_fake_walls = 2;
+    Position arr_fake_walls[] = {Position(2, 0), Position(4,0)};
+
+    Map * map = new Map(10, 10, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Sherlock * sherlock = new Sherlock(1, "RUU", Position(1, 3), map, 150, 450);
+
+    BaseItem * firstAid1 = new FirstAid();
+    BaseItem * firstAid2 = new FirstAid();
+
+    BaseBag * sherlockBag = new SherlockBag(sherlock);
+
+    sherlockBag->insert(firstAid1);
+    sherlockBag->insert(firstAid2);
+
+    cout << sherlockBag->str() << endl;
+
+    delete map;
+    delete sherlock;
+    delete firstAid1;
+    delete firstAid2;
+    delete sherlockBag;
+}
+
 void tc_1323() {
     cout << "----- Testcase 323 -----" << endl;
     int num_walls = 4;
@@ -625,6 +654,9 @@ public:
     
     static void tc_1297() {
         ::tc_1297();
+    }
+    static void tc_1298() {
+        ::tc_1298();
     }
     static void tc_1323() {
         ::tc_1323();
