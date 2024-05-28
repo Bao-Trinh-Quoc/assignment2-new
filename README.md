@@ -141,5 +141,7 @@ Checked! <br>
 Added more code in run in StudyPinkProgram class <br>
 **assign itemType to each item when created** <br>
 -- two things needed to be done: <br>
-    * test how the Character will move <br>
+    * test how the Character will move --done <br>
     * test how the item and the bag will behave <br>
+added more testcases
+tested the bag <br>

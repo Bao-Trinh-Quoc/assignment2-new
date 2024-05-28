@@ -93,6 +93,70 @@ void tc_1094() {
     delete map;
     delete sherlock;
 }
+// moving rule có bước đi đầu tiên đến ô Wall
+void tc_1095() {
+    cout << "----- Testcase 95 -----" << endl;
+    int num_walls = 4;
+    Position arr_walls[] = {Position(1, 1), Position(1, 3), Position(3, 1), Position(3, 3)};
+    int num_fake_walls = 1;
+    Position arr_fake_walls[] = {Position(2, 2)};
+
+    Map * map = new Map(5, 5, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Sherlock * sherlock = new Sherlock(1, "URL", Position(2, 1), map, 100, 250);
+    cout << sherlock->getNextPosition().str() << endl;
+
+    delete map;
+    delete sherlock;
+}
+// moving rule có bước đi đầu tiên đến ô FakeWall
+void tc_1096() {
+    cout << "----- Testcase 96 -----" << endl;
+    int num_walls = 4;
+    Position arr_walls[] = {Position(1, 1), Position(1, 3), Position(3, 1), Position(3, 3)};
+    int num_fake_walls = 1;
+    Position arr_fake_walls[] = {Position(2, 2)};
+
+    Map * map = new Map(5, 5, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Sherlock * sherlock = new Sherlock(1, "URL", Position(3, 2), map, 100, 250);
+    cout << sherlock->getNextPosition().str() << endl;
+
+    delete map;
+    delete sherlock;
+}
+// moving rule có bước đi đầu tiên qua Wall và bị đứng yên, bước đi tiếp theo không qua Wall nên thực hiện di chuyển
+void tc_1097() {
+    cout << "----- Testcase 97 -----" << endl;
+    int num_walls = 4;
+    Position arr_walls[] = {Position(1, 1), Position(1, 3), Position(3, 1), Position(3, 3)};
+    int num_fake_walls = 1;
+    Position arr_fake_walls[] = {Position(2, 2)};
+
+    Map * map = new Map(5, 5, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Sherlock * sherlock = new Sherlock(1, "URL", Position(4, 1), map, 100, 250);
+    cout << sherlock->getNextPosition().str() << endl;
+
+    delete map;
+    delete sherlock;
+}
+// moving rule có bước đi làm nhân vật di chuyển ra ngoài bản đồ => nhân vật cần dừng lại ở rìa bản đồ
+void tc_1098() {
+    cout << "----- Testcase 98 -----" << endl;
+    int num_walls = 4;
+    Position arr_walls[] = {Position(1, 1), Position(1, 3), Position(3, 1), Position(3, 3)};
+    int num_fake_walls = 1;
+    Position arr_fake_walls[] = {Position(2, 2)};
+
+    Map * map = new Map(5, 5, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Sherlock * sherlock = new Sherlock(1, "URL", Position(1, 4), map, 100, 250);
+    cout << sherlock->getNextPosition().str() << endl;
+
+    delete map;
+    delete sherlock;
+}
 void tc_1099() {
     cout << "----- Testcase 99 -----" << endl;
     int num_walls = 4;
@@ -134,6 +198,38 @@ void tc_1114() {
     Map * map = new Map(5, 5, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
 
     Watson *watson = new Watson(1, "LUR", Position(0, 1), map, 100, 250);
+    cout << watson->getNextPosition().str() << endl;
+
+    delete map;
+    delete watson;
+}
+// moving rule có bước đi đầu tiên đến ô FakeWall và có thể đến được
+void tc_1116() {
+    cout << "----- Testcase 116 -----" << endl;
+    int num_walls = 8;
+    Position arr_walls[] = {Position(1, 1), Position(2, 1), Position(3, 1), Position(4, 1), Position(1, 3), Position(2, 3), Position(3, 3), Position(4, 3)};
+    int num_fake_walls = 2;
+    Position arr_fake_walls[] = {Position(1, 2), Position(4, 2)};
+
+    Map * map = new Map(5, 5, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Watson *watson = new Watson(1, "DR", Position(3, 2), map, 100, 500);
+    cout << watson->getNextPosition().str() << endl;
+
+    delete map;
+    delete watson;
+}
+// moving rule có bước đi đầu tiên đến ô FakeWall và không thể đến được
+void tc_1117() {
+    cout << "----- Testcase 117 -----" << endl;
+    int num_walls = 8;
+    Position arr_walls[] = {Position(1, 1), Position(2, 1), Position(3, 1), Position(4, 1), Position(1, 3), Position(2, 3), Position(3, 3), Position(4, 3)};
+    int num_fake_walls = 2;
+    Position arr_fake_walls[] = {Position(1, 2), Position(4, 2)};
+
+    Map * map = new Map(5, 5, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Watson *watson = new Watson(1, "DR", Position(0, 2), map, 100, 500);
     cout << watson->getNextPosition().str() << endl;
 
     delete map;
@@ -239,6 +335,46 @@ void tc_1159() {
 
     Sherlock * sherlock = new Sherlock(1, "LU", Position(0, 0), map, 100, 250);
     Watson * watson = new Watson(2, "LU", Position(0, 6), map, 100, 250);
+    Criminal * criminal = new Criminal(0, Position(3, 3), map, sherlock, watson);
+    cout << criminal->str() << endl;
+
+    delete map;
+    delete sherlock;
+    delete watson;
+    delete criminal;
+}
+// "có 1 vị trí mà k/c từ Criminal đến Sherlock + Watson là dài nhất + vị trí đó không đi đến được"
+void tc_1160() {
+    cout << "----- Testcase 160 -----" << endl;
+    int num_walls = 14;
+    Position arr_walls[] = {Position(1, 0), Position(1, 1), Position(1, 2), Position(1, 4), Position(1, 5), Position(1, 6), Position(3, 2), Position(3, 4), Position(5, 0), Position(5, 1), Position(5, 2), Position(5, 4), Position(5, 5), Position(5, 6)};
+    int num_fake_walls = 3;
+    Position arr_fake_walls[] = {Position(1, 3), Position(2, 3), Position(5, 3)};
+
+    Map * map = new Map(7, 7, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Sherlock * sherlock = new Sherlock(1, "LU", Position(0, 0), map, 100, 250);
+    Watson * watson = new Watson(2, "LU", Position(6, 0), map, 100, 250);
+    Criminal * criminal = new Criminal(0, Position(3, 6), map, sherlock, watson);
+    cout << criminal->str() << endl;
+
+    delete map;
+    delete sherlock;
+    delete watson;
+    delete criminal;
+}
+// "có 2 vị trí mà k/c từ Criminal đến Sherlock + Watson là dài nhất + vị trí đó có thể đi đến được"
+void tc_1161() {
+    cout << "----- Testcase 161 -----" << endl;
+    int num_walls = 14;
+    Position arr_walls[] = {Position(1, 0), Position(1, 1), Position(1, 2), Position(1, 4), Position(1, 5), Position(1, 6), Position(3, 2), Position(3, 4), Position(5, 0), Position(5, 1), Position(5, 2), Position(5, 4), Position(5, 5), Position(5, 6)};
+    int num_fake_walls = 2;
+    Position arr_fake_walls[] = {Position(1, 3), Position(5, 3)};
+
+    Map * map = new Map(7, 7, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Sherlock * sherlock = new Sherlock(1, "LU", Position(3, 0), map, 100, 250);
+    Watson * watson = new Watson(2, "LU", Position(3, 6), map, 100, 250);
     Criminal * criminal = new Criminal(0, Position(3, 3), map, sherlock, watson);
     cout << criminal->str() << endl;
 
@@ -484,7 +620,162 @@ void tc_1298() {
     delete firstAid2;
     delete sherlockBag;
 }
+void tc_1299() {
+    cout << "----- Testcase 299 -----" << endl;
+    int num_walls = 4;
+    Position arr_walls[] = {Position(1, 2), Position(2, 3), Position(3, 4), Position(4,5)};
+    int num_fake_walls = 2;
+    Position arr_fake_walls[] = {Position(2, 0), Position(4,0)};
 
+    Map * map = new Map(10, 10, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Sherlock * sherlock = new Sherlock(1, "RUU", Position(1, 3), map, 80, 450);
+
+    BaseBag * sherlockBag = new SherlockBag(sherlock);
+
+    for (int i=0; i<12; i++) {
+        BaseItem * firstAid = new FirstAid();
+        sherlockBag->insert(firstAid);
+    }
+
+    cout << sherlockBag->str() << endl;
+
+    delete map;
+    delete sherlock;
+    delete sherlockBag;
+}
+void tc_1300() {
+    cout << "----- Testcase 300 -----" << endl;
+    int num_walls = 4;
+    Position arr_walls[] = {Position(1, 2), Position(2, 3), Position(3, 4), Position(4,5)};
+    int num_fake_walls = 2;
+    Position arr_fake_walls[] = {Position(2, 0), Position(4,0)};
+
+    Map * map = new Map(10, 10, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Sherlock * sherlock = new Sherlock(1, "RUU", Position(1, 3), map, 80, 450);
+
+    BaseBag * sherlockBag = new SherlockBag(sherlock);
+
+    for (int i=0; i<14; i++) {
+        BaseItem * firstAid = new FirstAid();
+        sherlockBag->insert(firstAid);
+    }
+
+    cout << sherlockBag->str() << endl;
+
+    delete map;
+    delete sherlock;
+    delete sherlockBag;
+}
+void tc_1302() {
+    cout << "----- Testcase 302 -----" << endl;
+    int num_walls = 4;
+    Position arr_walls[] = {Position(1, 2), Position(2, 3), Position(3, 4), Position(4,5)};
+    int num_fake_walls = 2;
+    Position arr_fake_walls[] = {Position(2, 0), Position(4,0)};
+
+    Map * map = new Map(10, 10, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Sherlock * sherlock = new Sherlock(1, "RUU", Position(1, 3), map, 150, 450);
+
+    BaseBag * sherlockBag = new SherlockBag(sherlock);
+
+    sherlockBag->get();
+
+    cout << sherlockBag->str() << endl;
+
+    delete map;
+    delete sherlock;
+    delete sherlockBag;
+}
+void tc_1303() {
+    cout << "----- Testcase 303 -----" << endl;
+    int num_walls = 4;
+    Position arr_walls[] = {Position(1, 2), Position(2, 3), Position(3, 4), Position(4,5)};
+    int num_fake_walls = 2;
+    Position arr_fake_walls[] = {Position(2, 0), Position(4,0)};
+
+    Map * map = new Map(10, 10, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Sherlock * sherlock = new Sherlock(1, "RUU", Position(1, 3), map, 150, 450);
+
+    BaseItem * passingCard1 = new PassingCard("RobotSW");
+    BaseItem * passingCard2 = new PassingCard("all");
+
+    BaseBag * sherlockBag = new SherlockBag(sherlock);
+
+    sherlockBag->insert(passingCard1);
+    sherlockBag->insert(passingCard2);
+
+    sherlockBag->get();
+
+    cout << sherlockBag->str() << endl; // str
+
+    delete map;
+    delete sherlock;
+    delete passingCard1;
+    delete passingCard2;
+    delete sherlockBag;
+}
+void tc_1304() {
+    cout << "----- Testcase 304 -----" << endl;
+    int num_walls = 4;
+    Position arr_walls[] = {Position(1, 2), Position(2, 3), Position(3, 4), Position(4,5)};
+    int num_fake_walls = 2;
+    Position arr_fake_walls[] = {Position(2, 0), Position(4,0)};
+
+    Map * map = new Map(10, 10, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Sherlock * sherlock = new Sherlock(1, "RUU", Position(1, 3), map, 120, 300);
+
+    BaseItem * passingCard = new PassingCard("all"); 
+    BaseItem * firstAid = new FirstAid();
+
+    BaseBag * sherlockBag = new SherlockBag(sherlock);
+
+    sherlockBag->insert(passingCard);
+    sherlockBag->insert(firstAid);
+
+    sherlockBag->get();
+
+    cout << sherlockBag->str() << endl;
+
+    delete map;
+    delete sherlock;
+    delete passingCard;
+    delete firstAid;
+    delete sherlockBag;
+}
+void tc_1307() {
+    cout << "----- Testcase 303 -----" << endl;
+    int num_walls = 4;
+    Position arr_walls[] = {Position(1, 2), Position(2, 3), Position(3, 4), Position(4,5)};
+    int num_fake_walls = 2;
+    Position arr_fake_walls[] = {Position(2, 0), Position(4,0)};
+
+    Map * map = new Map(10, 10, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+
+    Sherlock * sherlock = new Sherlock(1, "RUU", Position(1, 3), map, 150, 450);
+
+    BaseItem * passingCard1 = new PassingCard("RobotS");
+    BaseItem * passingCard2 = new PassingCard("RobotC");
+
+    BaseBag * sherlockBag = new SherlockBag(sherlock);
+
+    sherlockBag->insert(passingCard1);
+    sherlockBag->insert(passingCard2);
+
+    sherlockBag->get(PASSING_CARD);
+
+    cout << sherlockBag->str() << endl;
+
+    delete map;
+    delete sherlock;
+    delete passingCard1;
+    delete passingCard2;
+    delete sherlockBag;
+}
 void tc_1323() {
     cout << "----- Testcase 323 -----" << endl;
     int num_walls = 4;
@@ -572,6 +863,18 @@ public:
     static void tc_1094() {
         ::tc_1094();
     }
+    static void tc_1095() {
+        ::tc_1095();
+    }
+    static void tc_1096() {
+        ::tc_1096();
+    }
+    static void tc_1097() {
+        ::tc_1097();
+    }
+    static void tc_1098() {
+        ::tc_1098();
+    }
     static void tc_1099() {
         ::tc_1099();
     }
@@ -580,6 +883,12 @@ public:
     }
     static void tc_1114() {
         ::tc_1114();
+    }
+    static void tc_1116() {
+        ::tc_1116();
+    }
+    static void tc_1117() {
+        ::tc_1117();
     }
     static void tc_1120() {
         ::tc_1120();
@@ -598,6 +907,12 @@ public:
     }
     static void tc_1159() {
         ::tc_1159();
+    }
+    static void tc_1160() {
+        ::tc_1160();
+    }
+    static void tc_1161() {
+        ::tc_1161();
     }
     static void tc_1167() {
         ::tc_1167();
@@ -657,6 +972,24 @@ public:
     }
     static void tc_1298() {
         ::tc_1298();
+    }
+    static void tc_1299() {
+        ::tc_1299();
+    }
+    static void tc_1300() {
+        ::tc_1300();
+    }
+    static void tc_1302() {
+        ::tc_1302();
+    }
+    static void tc_1303() {
+        ::tc_1303();
+    }
+    static void tc_1304() {
+        ::tc_1304();
+    }
+    static void tc_1307() {
+        ::tc_1307();
     }
     static void tc_1323() {
         ::tc_1323();

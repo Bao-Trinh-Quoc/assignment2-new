@@ -153,6 +153,16 @@ int main(int argc, const char * argv[]) {
     // TestStudyInPink::tc_1278();
     // TestStudyInPink::tc_1354();
     // TestStudyInPink::tc_1194();
-    TestStudyInPink::tc_1298();
+    // TestStudyInPink::tc_1298();
+    // TestStudyInPink::tc_1095();
+    // TestStudyInPink::tc_1096(); 
+    // TestStudyInPink::tc_1097();
+    // TestStudyInPink::tc_1098();
+    // TestStudyInPink::tc_1116();
+    // TestStudyInPink::tc_1117();
+    // TestStudyInPink::tc_1160();
+    // TestStudyInPink::tc_1161();
+    // TestStudyInPink::tc_1299();
+    TestStudyInPink::tc_1307();
     return 0;
 }   
