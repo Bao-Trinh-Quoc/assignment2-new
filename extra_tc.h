@@ -390,6 +390,25 @@ void tc_1167() {
     cout << arr_mv_objs->str() << endl;
     delete arr_mv_objs;
 }
+void tc_1168() {
+    cout << "----- Testcase 168 -----" << endl;
+
+    int num_walls = 3;
+    Position arr_walls[] = {Position(1, 2), Position(2, 3), Position(3, 4)};
+    int num_fake_walls = 1;
+    Position arr_fake_walls[] = {Position(2, 0)};
+
+    Map * map = new Map(10, 10, num_walls, arr_walls, num_fake_walls, arr_fake_walls);
+    Sherlock * sherlock = new Sherlock(1, "RUU", Position(1, 3), map, 250, 450);
+    
+    ArrayMovingObject * arr_mv_objs = new ArrayMovingObject(5);
+    arr_mv_objs->add(sherlock);
+
+    cout << arr_mv_objs->str() << endl;
+    delete arr_mv_objs;
+    delete sherlock;
+    delete map;
+}
 bool tc_1171() {
     cout << "----- Testcase 171 -----" << endl;
 
@@ -916,6 +935,9 @@ public:
     }
     static void tc_1167() {
         ::tc_1167();
+    }
+    static void tc_1168() {
+        ::tc_1168();
     }
     static void tc_1171() {
         ::tc_1171();

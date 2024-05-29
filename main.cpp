@@ -163,6 +163,7 @@ int main(int argc, const char * argv[]) {
     // TestStudyInPink::tc_1160();
     // TestStudyInPink::tc_1161();
     // TestStudyInPink::tc_1299();
-    TestStudyInPink::tc_1307();
+    // TestStudyInPink::tc_1307();
+    TestStudyInPink::tc_1168();
     return 0;
 }   
